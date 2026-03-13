@@ -1,13 +1,12 @@
-body{margin:0;font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;}
+body{margin:0;font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;overflow:hidden;}
 .dark{background:#1e1e2f;color:white;}
 
-#app{display:block;}
+#app{display:flex;height:100vh;width:100vw;}
 
 /* Sidebar */
 .sidebar{
-  width:250px;height:100vh;background:linear-gradient(180deg,#4CAF50,#2E8B57);position:fixed;padding:20px;display:flex;flex-direction:column;
-  box-shadow:2px 0 10px rgba(0,0,0,0.1);
-  color:white;
+  width:250px;background:linear-gradient(180deg,#4CAF50,#2E8B57);padding:20px;display:flex;flex-direction:column;
+  box-shadow:2px 0 10px rgba(0,0,0,0.1);color:white;
 }
 .sidebar button{
   margin-top:10px;padding:12px;background:rgba(255,255,255,0.2);border:none;color:white;font-weight:bold;cursor:pointer;
@@ -16,15 +15,15 @@ body{margin:0;font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;}
 .sidebar button:hover{background:rgba(255,255,255,0.4);}
 .profile{text-align:center;margin-bottom:30px;}
 .profile img{width:80px;height:80px;border-radius:50%;border:2px solid white;box-shadow:0 0 10px rgba(0,0,0,0.2);}
-.profile h3{margin-top:10px;}
+.profile h3{margin-top:10px;font-size:18px;}
 
 /* Main Content */
-.main{margin-left:270px;padding:30px;}
+.main{flex:1;padding:20px;overflow-y:auto;}
 .page{display:none;}
 .page.active{display:block;}
 
 /* Canvas */
-#canvas{width:700px;height:400px;border:2px dashed #ccc;background:white;cursor:crosshair;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+#canvas{width:100%;height:400px;border:2px dashed #ccc;background:white;cursor:crosshair;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
 .toolbar button{margin-right:10px;padding:8px 15px;border-radius:6px;border:none;background:#4CAF50;color:white;cursor:pointer;}
 .toolbar button:hover{background:#3e8e41;}
 #layers{margin-top:10px;font-size:14px;}

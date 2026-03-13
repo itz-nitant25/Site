@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AI Creator Studio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- Sidebar -->
+<div class="sidebar">
+<h2>AI Studio</h2>
+
+<button onclick="openTool('content')">Content Generator</button>
+<button onclick="openTool('caption')">Caption Writer</button>
+<button onclick="openTool('script')">Script Writer</button>
+<button onclick="openTool('image')">Image Generator</button>
+
+</div>
+
+<!-- Workspace -->
+<div class="workspace">
+
+<div id="content" class="tool active">
+<h2>AI Content Generator</h2>
+<textarea id="contentInput" placeholder="Enter topic..."></textarea>
+<button onclick="generateContent()">Generate</button>
+<p id="contentResult"></p>
+</div>
+
+<div id="caption" class="tool">
+<h2>AI Caption Writer</h2>
+<textarea id="captionInput" placeholder="Enter photo topic"></textarea>
+<button onclick="generateCaption()">Generate</button>
+<p id="captionResult"></p>
+</div>
+
+<div id="script" class="tool">
+<h2>AI Script Writer</h2>
+<textarea id="scriptInput" placeholder="Enter video topic"></textarea>
+<button onclick="generateScript()">Generate</button>
+<p id="scriptResult"></p>
+</div>
+
+<div id="image" class="tool">
+<h2>AI Image Generator</h2>
+<textarea placeholder="Describe image"></textarea>
+<button>Generate</button>
+</div>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

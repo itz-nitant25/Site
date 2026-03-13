@@ -3,76 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <title>ToolPilot AI</title>
-<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<!-- LOGIN POPUP -->
-<div id="loginPopup">
-  <div class="popupBox">
-    <h2>Continue with Google</h2>
-    <button onclick="googleLogin()">Login</button>
-    <button onclick="googleLogin()">Sign Up</button>
-  </div>
+<div id="loginPage">
+
+<h2>Login</h2>
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+<button onclick="signup()">Sign Up</button>
+
 </div>
 
-<!-- MAIN APP -->
+
 <div id="app">
 
 <div class="sidebar">
 
-<div class="profile">
-<img id="profilePic" src="https://via.placeholder.com/80">
-<h3 id="profileName">Guest</h3>
-</div>
+<h3 id="username">User</h3>
 
-<button onclick="openPage('dashboard')">Dashboard</button>
-<button onclick="openPage('editor')">Editor</button>
-<button onclick="openPage('aiImage')">AI Image</button>
-<button onclick="openPage('settings')">Settings</button>
+<button onclick="showPage('dashboard')">Dashboard</button>
+<button onclick="showPage('editor')">Editor</button>
+<button onclick="showPage('ai')">AI Image</button>
+<button onclick="showPage('settings')">Settings</button>
 
 </div>
+
 
 <div class="main">
 
 <div id="dashboard" class="page active">
-<h1 id="welcomeMsg">Hi Guest</h1>
-<p>Free trial mode active</p>
+<h1 id="welcome"></h1>
 </div>
+
 
 <div id="editor" class="page">
 
-<h2>Design Editor</h2>
-
 <div class="toolbar">
-<button onclick="drawMode()">Draw</button>
+
 <button onclick="addText()">Text</button>
-<button onclick="uploadImage()">Upload Image</button>
+<button onclick="drawMode()">Draw</button>
+<button onclick="uploadImage()">Upload</button>
+<button onclick="grayscale()">Grayscale</button>
 <button onclick="exportPNG()">Export PNG</button>
-</div>
-
-<canvas id="canvas"></canvas>
 
 </div>
 
-<div id="aiImage" class="page">
+<canvas id="canvas" width="900" height="500"></canvas>
 
-<h2>AI Image Generator</h2>
-
-<input id="imgPrompt" placeholder="Describe image">
-
-<button onclick="generateAIImage()">Generate</button>
-
-<div id="imageResult"></div>
+<div id="layers"></div>
 
 </div>
+
+
+<div id="ai" class="page">
+
+<input id="prompt" placeholder="Describe image">
+<button onclick="generateImage()">Generate</button>
+
+<div id="result"></div>
+
+</div>
+
 
 <div id="settings" class="page">
-
-<h2>Settings</h2>
 
 <button onclick="toggleDark()">Dark Mode</button>
 <button onclick="logout()">Logout</button>
@@ -80,8 +85,10 @@
 </div>
 
 </div>
+
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>

@@ -1,7 +1,6 @@
 body{margin:0;font-family:Arial;background:#f4f6fa;}
 .dark{background:#111;color:white;}
 
-#loginPage{text-align:center;margin-top:150px;}
 #app{display:none;}
 
 /* Sidebar */
@@ -9,7 +8,6 @@ body{margin:0;font-family:Arial;background:#f4f6fa;}
 width:230px;height:100vh;background:white;position:fixed;padding:20px;display:flex;flex-direction:column;
 }
 .sidebar button{margin-top:10px;padding:10px;background:#4CAF50;color:white;border:none;cursor:pointer;}
-
 .profile{text-align:center;margin-bottom:20px;}
 .profile img{width:70px;height:70px;border-radius:50%;}
 
@@ -17,11 +15,12 @@ width:230px;height:100vh;background:white;position:fixed;padding:20px;display:fl
 .page{display:none;}
 .page.active{display:block;}
 
-/* Canvas */
 #canvas{width:700px;height:400px;border:2px dashed #ccc;background:white;cursor:crosshair;}
-
-/* Help Chat */
 .helpChat{margin-top:auto;border-top:1px solid #ccc;padding-top:10px;}
 #layers{margin-top:10px;font-size:14px;}
 textarea,input{width:100%;padding:5px;margin-top:5px;}
 button{border-radius:5px;}
+
+/* Popup */
+.popup{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;justify-content:center;align-items:center;}
+.popupContent{background:white;padding:30px;border-radius:10px;width:300px;text-align:center;}

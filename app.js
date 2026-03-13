@@ -1,14 +1,13 @@
 let canvas,ctx,drawing=false,layers=[];
 
 window.onload=function(){
-  // Set guest user by default
   startApp({name:"Guest",pic:"https://via.placeholder.com/70"});
 
-  // Canvas
   canvas=document.getElementById("canvas");
   if(canvas){
     ctx=canvas.getContext("2d");
-    canvas.width=700; canvas.height=400;
+    canvas.width=canvas.offsetWidth;
+    canvas.height=400;
     canvas.addEventListener("mousedown",startDraw);
     canvas.addEventListener("mousemove",draw);
     canvas.addEventListener("mouseup",stopDraw);
@@ -16,7 +15,7 @@ window.onload=function(){
 }
 
 function startApp(user){
-  document.getElementById("app").style.display="block";
+  document.getElementById("app").style.display="flex";
   document.getElementById("profileName").innerText=user.name;
   document.getElementById("profilePic").src=user.pic;
   document.getElementById("welcomeMsg").innerText="Hi "+user.name;

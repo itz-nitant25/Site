@@ -2,76 +2,56 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>AI Creator Hub</title>
+<title>ToolPilot AI</title>
 <link rel="stylesheet" href="style.css">
-
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-
 </head>
 
 <body>
 
 <div class="sidebar">
 
-<h2>AI Hub</h2>
+<h2>✈ ToolPilot AI</h2>
+
+<input id="search" placeholder="Search tools">
 
 <button onclick="openTool('dashboard')">Dashboard</button>
 <button onclick="openTool('ai')">AI Chat</button>
 <button onclick="openTool('content')">Content</button>
 <button onclick="openTool('caption')">Caption</button>
+<button onclick="openTool('script')">Script</button>
 <button onclick="openTool('hashtags')">Hashtags</button>
+<button onclick="openTool('email')">Email</button>
+<button onclick="openTool('bio')">Bio</button>
+<button onclick="openTool('title')">Title</button>
+<button onclick="openTool('ideas')">Ideas</button>
+<button onclick="openTool('summary')">Summary</button>
+<button onclick="openTool('keywords')">Keywords</button>
 <button onclick="openTool('editor')">Design Editor</button>
 
 <button onclick="toggleDark()">🌙 Dark Mode</button>
-<button onclick="logout()">Logout</button>
 
 </div>
-
 
 <div class="workspace">
 
-<!-- LOGIN PAGE -->
+<div id="dashboard" class="tool active">
 
-<div id="loginPage" class="login">
-
-<h2>Login</h2>
-
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-
-<button onclick="login()">Login</button>
-<button onclick="signup()">Signup</button>
-<button onclick="googleLogin()">Google Login</button>
-
-</div>
-
-
-<!-- DASHBOARD -->
-
-<div id="dashboard" class="tool">
-
-<h2>User Dashboard</h2>
+<h1>Welcome to ToolPilot AI</h1>
 
 <div class="card">
-
 <p>User</p>
-<div id="userEmail"></div>
-
+<h2 id="userName">Guest</h2>
 </div>
 
 <div class="card">
-
 <p>Total AI Requests</p>
-<div id="requestCount">0</div>
-
+<h2 id="count">0</h2>
 </div>
 
+<input id="usernameInput" placeholder="Enter username">
+<button onclick="saveUser()">Save</button>
+
 </div>
-
-
-<!-- AI CHAT -->
 
 <div id="ai" class="tool">
 
@@ -87,70 +67,88 @@
 
 </div>
 
-
-<!-- CONTENT -->
-
 <div id="content" class="tool">
-
 <h2>Content Generator</h2>
-
 <textarea id="contentPrompt"></textarea>
-
 <button onclick="generateContent()">Generate</button>
-
 <div id="contentResult" class="result"></div>
-
 </div>
-
-
-<!-- CAPTION -->
 
 <div id="caption" class="tool">
-
-<h2>Caption Generator</h2>
-
+<h2>Caption Writer</h2>
 <textarea id="captionPrompt"></textarea>
-
 <button onclick="generateCaption()">Generate</button>
-
 <div id="captionResult" class="result"></div>
-
 </div>
 
-
-<!-- HASHTAGS -->
+<div id="script" class="tool">
+<h2>Script Writer</h2>
+<textarea id="scriptPrompt"></textarea>
+<button onclick="generateScript()">Generate</button>
+<div id="scriptResult" class="result"></div>
+</div>
 
 <div id="hashtags" class="tool">
-
 <h2>Hashtag Generator</h2>
-
 <textarea id="hashtagPrompt"></textarea>
-
 <button onclick="generateHashtags()">Generate</button>
-
 <div id="hashtagResult" class="result"></div>
-
 </div>
 
+<div id="email" class="tool">
+<h2>Email Writer</h2>
+<textarea id="emailPrompt"></textarea>
+<button onclick="generateEmail()">Generate</button>
+<div id="emailResult" class="result"></div>
+</div>
 
-<!-- DESIGN EDITOR -->
+<div id="bio" class="tool">
+<h2>Bio Generator</h2>
+<textarea id="bioPrompt"></textarea>
+<button onclick="generateBio()">Generate</button>
+<div id="bioResult" class="result"></div>
+</div>
+
+<div id="title" class="tool">
+<h2>Title Generator</h2>
+<textarea id="titlePrompt"></textarea>
+<button onclick="generateTitle()">Generate</button>
+<div id="titleResult" class="result"></div>
+</div>
+
+<div id="ideas" class="tool">
+<h2>Content Ideas</h2>
+<textarea id="ideasPrompt"></textarea>
+<button onclick="generateIdeas()">Generate</button>
+<div id="ideasResult" class="result"></div>
+</div>
+
+<div id="summary" class="tool">
+<h2>Summary Tool</h2>
+<textarea id="summaryPrompt"></textarea>
+<button onclick="generateSummary()">Summarize</button>
+<div id="summaryResult" class="result"></div>
+</div>
+
+<div id="keywords" class="tool">
+<h2>Keyword Generator</h2>
+<textarea id="keywordsPrompt"></textarea>
+<button onclick="generateKeywords()">Generate</button>
+<div id="keywordsResult" class="result"></div>
+</div>
 
 <div id="editor" class="tool">
 
 <h2>Design Editor</h2>
 
-<div class="editor-tools">
-
 <button onclick="addText()">Text</button>
-<button onclick="addBox()">Shape</button>
+<button onclick="addBox()">Box</button>
+<button onclick="addCircle()">Circle</button>
 <button onclick="clearCanvas()">Clear</button>
-
-</div>
 
 <div id="canvas"></div>
 
 </div>
-
 
 </div>
 

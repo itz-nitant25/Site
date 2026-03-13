@@ -5,7 +5,6 @@
 <title>ToolPilot AI SaaS</title>
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <!-- Trial / Login Popup -->
@@ -13,10 +12,8 @@
   <div class="popupContent">
     <h2>Trial Expired</h2>
     <p>Your 1-day free trial has ended. Please login or sign up to continue.</p>
-    
     <input id="popupName" placeholder="Name / Email">
     <input id="popupPass" placeholder="Password" type="password">
-    
     <button onclick="popupLogin()">Login</button>
     <button onclick="popupSignUp()">Sign Up</button>
   </div>
@@ -24,68 +21,64 @@
 
 <!-- App -->
 <div id="app">
-<div class="sidebar">
-<div class="profile">
-<img id="profilePic">
-<h3 id="profileName"></h3>
-</div>
+  <div class="sidebar">
+    <div class="profile">
+      <img id="profilePic" src="https://via.placeholder.com/70">
+      <h3 id="profileName"></h3>
+    </div>
+    <button onclick="openPage('dashboard')">Dashboard</button>
+    <button onclick="openPage('editor')">Editor</button>
+    <button onclick="openPage('ai')">AI Chat</button>
+    <button onclick="openPage('imageAI')">AI Image</button>
+    <button onclick="openPage('settings')">Settings</button>
 
-<button onclick="openPage('dashboard')">Dashboard</button>
-<button onclick="openPage('editor')">Editor</button>
-<button onclick="openPage('ai')">AI Chat</button>
-<button onclick="openPage('imageAI')">AI Image</button>
-<button onclick="openPage('settings')">Settings</button>
+    <div class="helpChat">
+      <h4>Help AI</h4>
+      <input id="helpInput" placeholder="Ask AI">
+      <button onclick="helpAI()">Send</button>
+      <div id="helpResult"></div>
+    </div>
+  </div>
 
-<div class="helpChat">
-<h4>Help AI</h4>
-<input id="helpInput" placeholder="Ask AI">
-<button onclick="helpAI()">Send</button>
-<div id="helpResult"></div>
-</div>
+  <div class="main">
+    <div id="dashboard" class="page">
+      <h1 id="welcomeMsg"></h1>
+      <p>Welcome to ToolPilot AI SaaS</p>
+    </div>
 
-</div>
+    <div id="editor" class="page">
+      <h2>Design Editor</h2>
+      <div class="toolbar">
+        <button onclick="drawMode()">Draw</button>
+        <button onclick="addText()">Text</button>
+        <button onclick="uploadImage()">Upload Image</button>
+        <button onclick="exportPNG()">Export PNG</button>
+        <button onclick="clearCanvas()">Clear</button>
+      </div>
+      <canvas id="canvas"></canvas>
+      <div id="layers"></div>
+    </div>
 
-<div class="main">
+    <div id="ai" class="page">
+      <h2>AI Chat</h2>
+      <textarea id="prompt"></textarea>
+      <button onclick="askAI()">Send</button>
+      <div id="result"></div>
+    </div>
 
-<div id="dashboard" class="page">
-<h1 id="welcomeMsg"></h1>
-<p>Welcome to ToolPilot AI SaaS</p>
-</div>
+    <div id="imageAI" class="page">
+      <h2>AI Image Generator</h2>
+      <input id="imgPrompt" placeholder="Describe Image">
+      <button onclick="generateImage()">Generate</button>
+      <div id="imageResult"></div>
+    </div>
 
-<div id="editor" class="page">
-<h2>Design Editor</h2>
-<div class="toolbar">
-<button onclick="drawMode()">Draw</button>
-<button onclick="addText()">Text</button>
-<button onclick="uploadImage()">Upload Image</button>
-<button onclick="exportPNG()">Export PNG</button>
-<button onclick="clearCanvas()">Clear</button>
-</div>
-<canvas id="canvas"></canvas>
-<div id="layers"></div>
-</div>
-
-<div id="ai" class="page">
-<h2>AI Chat</h2>
-<textarea id="prompt"></textarea>
-<button onclick="askAI()">Send</button>
-<div id="result"></div>
-</div>
-
-<div id="imageAI" class="page">
-<h2>AI Image Generator</h2>
-<input id="imgPrompt" placeholder="Describe Image">
-<button onclick="generateImage()">Generate</button>
-<div id="imageResult"></div>
-</div>
-
-<div id="settings" class="page">
-<h2>Settings</h2>
-<button onclick="toggleDark()">Dark Mode</button>
-<button onclick="logout()">Logout</button>
-</div>
-
-</div>
+    <div id="settings" class="page">
+      <h2>Settings</h2>
+      <button onclick="toggleDark()">Dark Mode</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
 </div>
 
 <script src="script.js"></script>

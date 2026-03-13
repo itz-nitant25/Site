@@ -3,59 +3,335 @@
 <head>
 <meta charset="UTF-8">
 <title>AI Creator Studio</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f6f7fb;
+}
+
+.app{
+display:flex;
+height:100vh;
+}
+
+/* sidebar */
+
+.sidebar{
+width:230px;
+background:white;
+border-right:1px solid #ddd;
+padding:20px;
+}
+
+.sidebar h2{
+margin-bottom:20px;
+}
+
+.sidebar button{
+width:100%;
+margin-bottom:10px;
+padding:10px;
+border:none;
+background:#f1f1f1;
+cursor:pointer;
+border-radius:6px;
+}
+
+.sidebar button:hover{
+background:#e6e6e6;
+}
+
+/* workspace */
+
+.workspace{
+flex:1;
+display:flex;
+justify-content:center;
+align-items:flex-start;
+padding:40px;
+}
+
+/* tool card */
+
+.tool{
+display:none;
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+width:600px;
+}
+
+.tool.active{
+display:block;
+}
+
+textarea{
+width:100%;
+height:90px;
+margin-top:10px;
+padding:10px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+select{
+margin-top:10px;
+padding:8px;
+border-radius:6px;
+}
+
+button.generate{
+margin-top:15px;
+padding:10px 20px;
+background:#4CAF50;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.result{
+margin-top:15px;
+padding:10px;
+background:#f2f2f2;
+border-radius:6px;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <div class="app">
 
-<!-- Sidebar -->
+<!-- SIDEBAR -->
+
 <div class="sidebar">
+
 <h2>AI Studio</h2>
 
-<button onclick="openTool('content')">Content Generator</button>
+<button onclick="openTool('content')">AI Content</button>
 <button onclick="openTool('caption')">Caption Writer</button>
 <button onclick="openTool('script')">Script Writer</button>
-<button onclick="openTool('image')">Image Generator</button>
+<button onclick="openTool('image')">Image Prompt</button>
+<button onclick="openTool('reply')">Comment Reply</button>
 
 </div>
 
-<!-- Workspace -->
+<!-- WORKSPACE -->
+
 <div class="workspace">
 
+<!-- CONTENT -->
+
 <div id="content" class="tool active">
+
 <h2>AI Content Generator</h2>
-<textarea id="contentInput" placeholder="Enter topic..."></textarea>
-<button onclick="generateContent()">Generate</button>
-<p id="contentResult"></p>
+
+<textarea id="contentTopic" placeholder="Enter topic"></textarea>
+
+<br>
+
+<select id="contentTone">
+<option>Normal</option>
+<option>Professional</option>
+<option>Funny</option>
+</select>
+
+<select id="contentLength">
+<option>Short</option>
+<option>Medium</option>
+<option>Long</option>
+</select>
+
+<br>
+
+<button class="generate" onclick="generateContent()">Generate</button>
+
+<div class="result" id="contentResult"></div>
+
 </div>
+
+
+<!-- CAPTION -->
 
 <div id="caption" class="tool">
-<h2>AI Caption Writer</h2>
-<textarea id="captionInput" placeholder="Enter photo topic"></textarea>
-<button onclick="generateCaption()">Generate</button>
-<p id="captionResult"></p>
+
+<h2>Caption Generator</h2>
+
+<textarea id="captionTopic" placeholder="Photo topic"></textarea>
+
+<select id="captionTone">
+<option>Cool</option>
+<option>Funny</option>
+<option>Motivational</option>
+</select>
+
+<br>
+
+<button class="generate" onclick="generateCaption()">Generate</button>
+
+<div class="result" id="captionResult"></div>
+
 </div>
+
+
+<!-- SCRIPT -->
 
 <div id="script" class="tool">
-<h2>AI Script Writer</h2>
-<textarea id="scriptInput" placeholder="Enter video topic"></textarea>
-<button onclick="generateScript()">Generate</button>
-<p id="scriptResult"></p>
+
+<h2>Video Script Generator</h2>
+
+<textarea id="scriptTopic" placeholder="Video topic"></textarea>
+
+<select id="scriptStyle">
+<option>YouTube</option>
+<option>Short Reel</option>
+<option>Educational</option>
+</select>
+
+<br>
+
+<button class="generate" onclick="generateScript()">Generate</button>
+
+<div class="result" id="scriptResult"></div>
+
 </div>
+
+
+<!-- IMAGE -->
 
 <div id="image" class="tool">
-<h2>AI Image Generator</h2>
-<textarea placeholder="Describe image"></textarea>
-<button>Generate</button>
-</div>
+
+<h2>AI Image Prompt Tool</h2>
+
+<textarea id="imagePrompt" placeholder="Describe image"></textarea>
+
+<select id="imageStyle">
+<option>Realistic</option>
+<option>Cyberpunk</option>
+<option>Anime</option>
+</select>
+
+<br>
+
+<button class="generate" onclick="generateImage()">Generate Prompt</button>
+
+<div class="result" id="imageResult"></div>
 
 </div>
 
+
+<!-- COMMENT REPLY -->
+
+<div id="reply" class="tool">
+
+<h2>Comment Reply Generator</h2>
+
+<textarea id="commentInput" placeholder="Paste comment"></textarea>
+
+<select id="replyTone">
+<option>Friendly</option>
+<option>Professional</option>
+<option>Funny</option>
+</select>
+
+<br>
+
+<button class="generate" onclick="generateReply()">Generate Reply</button>
+
+<div class="result" id="replyResult"></div>
+
 </div>
 
-<script src="script.js"></script>
+
+</div>
+</div>
+
+
+<script>
+
+/* TOOL SWITCH */
+
+function openTool(id){
+
+let tools=document.querySelectorAll(".tool")
+
+tools.forEach(t=>{
+t.classList.remove("active")
+})
+
+document.getElementById(id).classList.add("active")
+
+}
+
+/* CONTENT */
+
+function generateContent(){
+
+let topic=document.getElementById("contentTopic").value
+let tone=document.getElementById("contentTone").value
+let length=document.getElementById("contentLength").value
+
+document.getElementById("contentResult").innerText=
+length+" "+tone+" content about "+topic
+
+}
+
+/* CAPTION */
+
+function generateCaption(){
+
+let topic=document.getElementById("captionTopic").value
+let tone=document.getElementById("captionTone").value
+
+document.getElementById("captionResult").innerText=
+tone+" caption for "+topic+" 🔥"
+
+}
+
+/* SCRIPT */
+
+function generateScript(){
+
+let topic=document.getElementById("scriptTopic").value
+let style=document.getElementById("scriptStyle").value
+
+document.getElementById("scriptResult").innerText=
+style+" video intro: Today we talk about "+topic
+
+}
+
+/* IMAGE */
+
+function generateImage(){
+
+let prompt=document.getElementById("imagePrompt").value
+let style=document.getElementById("imageStyle").value
+
+document.getElementById("imageResult").innerText=
+style+" image prompt: "+prompt
+
+}
+
+/* REPLY */
+
+function generateReply(){
+
+let comment=document.getElementById("commentInput").value
+let tone=document.getElementById("replyTone").value
+
+document.getElementById("replyResult").innerText=
+tone+" reply: Thanks for your comment! 🙌"
+
+}
+
+</script>
 
 </body>
 </html>

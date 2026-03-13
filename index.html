@@ -2,158 +2,103 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>AI Creator Studio</title>
+<title>AI Creator Hub</title>
+<link rel="stylesheet" href="style.css">
 
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-background:#f6f7fb;
-}
-
-.app{
-display:flex;
-height:100vh;
-}
-
-/* sidebar */
-
-.sidebar{
-width:230px;
-background:white;
-border-right:1px solid #ddd;
-padding:20px;
-}
-
-.sidebar h2{
-margin-bottom:20px;
-}
-
-.sidebar button{
-width:100%;
-margin-bottom:10px;
-padding:10px;
-border:none;
-background:#f1f1f1;
-cursor:pointer;
-border-radius:6px;
-}
-
-.sidebar button:hover{
-background:#e6e6e6;
-}
-
-/* workspace */
-
-.workspace{
-flex:1;
-display:flex;
-justify-content:center;
-align-items:flex-start;
-padding:40px;
-}
-
-/* tool card */
-
-.tool{
-display:none;
-background:white;
-padding:25px;
-border-radius:10px;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
-width:600px;
-}
-
-.tool.active{
-display:block;
-}
-
-textarea{
-width:100%;
-height:90px;
-margin-top:10px;
-padding:10px;
-border:1px solid #ccc;
-border-radius:6px;
-}
-
-select{
-margin-top:10px;
-padding:8px;
-border-radius:6px;
-}
-
-button.generate{
-margin-top:15px;
-padding:10px 20px;
-background:#4CAF50;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
-
-.result{
-margin-top:15px;
-padding:10px;
-background:#f2f2f2;
-border-radius:6px;
-}
-
-</style>
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
 
 </head>
 
 <body>
 
-<div class="app">
-
-<!-- SIDEBAR -->
-
 <div class="sidebar">
 
-<h2>AI Studio</h2>
+<h2>AI Hub</h2>
 
-<button onclick="openTool('content')">AI Content</button>
-<button onclick="openTool('caption')">Caption Writer</button>
-<button onclick="openTool('script')">Script Writer</button>
-<button onclick="openTool('image')">Image Prompt</button>
-<button onclick="openTool('reply')">Comment Reply</button>
+<button onclick="openTool('dashboard')">Dashboard</button>
+<button onclick="openTool('ai')">AI Chat</button>
+<button onclick="openTool('content')">Content</button>
+<button onclick="openTool('caption')">Caption</button>
+<button onclick="openTool('hashtags')">Hashtags</button>
+<button onclick="openTool('editor')">Design Editor</button>
+
+<button onclick="toggleDark()">🌙 Dark Mode</button>
+<button onclick="logout()">Logout</button>
 
 </div>
 
-<!-- WORKSPACE -->
 
 <div class="workspace">
 
+<!-- LOGIN PAGE -->
+
+<div id="loginPage" class="login">
+
+<h2>Login</h2>
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+<button onclick="signup()">Signup</button>
+<button onclick="googleLogin()">Google Login</button>
+
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="tool">
+
+<h2>User Dashboard</h2>
+
+<div class="card">
+
+<p>User</p>
+<div id="userEmail"></div>
+
+</div>
+
+<div class="card">
+
+<p>Total AI Requests</p>
+<div id="requestCount">0</div>
+
+</div>
+
+</div>
+
+
+<!-- AI CHAT -->
+
+<div id="ai" class="tool">
+
+<h2>AI Chat</h2>
+
+<textarea id="prompt"></textarea>
+
+<button onclick="askAI()">Generate</button>
+
+<div id="result" class="result"></div>
+
+<button onclick="copyText('result')">Copy</button>
+
+</div>
+
+
 <!-- CONTENT -->
 
-<div id="content" class="tool active">
+<div id="content" class="tool">
 
-<h2>AI Content Generator</h2>
+<h2>Content Generator</h2>
 
-<textarea id="contentTopic" placeholder="Enter topic"></textarea>
+<textarea id="contentPrompt"></textarea>
 
-<br>
+<button onclick="generateContent()">Generate</button>
 
-<select id="contentTone">
-<option>Normal</option>
-<option>Professional</option>
-<option>Funny</option>
-</select>
-
-<select id="contentLength">
-<option>Short</option>
-<option>Medium</option>
-<option>Long</option>
-</select>
-
-<br>
-
-<button class="generate" onclick="generateContent()">Generate</button>
-
-<div class="result" id="contentResult"></div>
+<div id="contentResult" class="result"></div>
 
 </div>
 
@@ -164,174 +109,52 @@ border-radius:6px;
 
 <h2>Caption Generator</h2>
 
-<textarea id="captionTopic" placeholder="Photo topic"></textarea>
+<textarea id="captionPrompt"></textarea>
 
-<select id="captionTone">
-<option>Cool</option>
-<option>Funny</option>
-<option>Motivational</option>
-</select>
+<button onclick="generateCaption()">Generate</button>
 
-<br>
-
-<button class="generate" onclick="generateCaption()">Generate</button>
-
-<div class="result" id="captionResult"></div>
+<div id="captionResult" class="result"></div>
 
 </div>
 
 
-<!-- SCRIPT -->
+<!-- HASHTAGS -->
 
-<div id="script" class="tool">
+<div id="hashtags" class="tool">
 
-<h2>Video Script Generator</h2>
+<h2>Hashtag Generator</h2>
 
-<textarea id="scriptTopic" placeholder="Video topic"></textarea>
+<textarea id="hashtagPrompt"></textarea>
 
-<select id="scriptStyle">
-<option>YouTube</option>
-<option>Short Reel</option>
-<option>Educational</option>
-</select>
+<button onclick="generateHashtags()">Generate</button>
 
-<br>
-
-<button class="generate" onclick="generateScript()">Generate</button>
-
-<div class="result" id="scriptResult"></div>
+<div id="hashtagResult" class="result"></div>
 
 </div>
 
 
-<!-- IMAGE -->
+<!-- DESIGN EDITOR -->
 
-<div id="image" class="tool">
+<div id="editor" class="tool">
 
-<h2>AI Image Prompt Tool</h2>
+<h2>Design Editor</h2>
 
-<textarea id="imagePrompt" placeholder="Describe image"></textarea>
+<div class="editor-tools">
 
-<select id="imageStyle">
-<option>Realistic</option>
-<option>Cyberpunk</option>
-<option>Anime</option>
-</select>
-
-<br>
-
-<button class="generate" onclick="generateImage()">Generate Prompt</button>
-
-<div class="result" id="imageResult"></div>
+<button onclick="addText()">Text</button>
+<button onclick="addBox()">Shape</button>
+<button onclick="clearCanvas()">Clear</button>
 
 </div>
 
-
-<!-- COMMENT REPLY -->
-
-<div id="reply" class="tool">
-
-<h2>Comment Reply Generator</h2>
-
-<textarea id="commentInput" placeholder="Paste comment"></textarea>
-
-<select id="replyTone">
-<option>Friendly</option>
-<option>Professional</option>
-<option>Funny</option>
-</select>
-
-<br>
-
-<button class="generate" onclick="generateReply()">Generate Reply</button>
-
-<div class="result" id="replyResult"></div>
+<div id="canvas"></div>
 
 </div>
 
 
 </div>
-</div>
 
-
-<script>
-
-/* TOOL SWITCH */
-
-function openTool(id){
-
-let tools=document.querySelectorAll(".tool")
-
-tools.forEach(t=>{
-t.classList.remove("active")
-})
-
-document.getElementById(id).classList.add("active")
-
-}
-
-/* CONTENT */
-
-function generateContent(){
-
-let topic=document.getElementById("contentTopic").value
-let tone=document.getElementById("contentTone").value
-let length=document.getElementById("contentLength").value
-
-document.getElementById("contentResult").innerText=
-length+" "+tone+" content about "+topic
-
-}
-
-/* CAPTION */
-
-function generateCaption(){
-
-let topic=document.getElementById("captionTopic").value
-let tone=document.getElementById("captionTone").value
-
-document.getElementById("captionResult").innerText=
-tone+" caption for "+topic+" 🔥"
-
-}
-
-/* SCRIPT */
-
-function generateScript(){
-
-let topic=document.getElementById("scriptTopic").value
-let style=document.getElementById("scriptStyle").value
-
-document.getElementById("scriptResult").innerText=
-style+" video intro: Today we talk about "+topic
-
-}
-
-/* IMAGE */
-
-function generateImage(){
-
-let prompt=document.getElementById("imagePrompt").value
-let style=document.getElementById("imageStyle").value
-
-document.getElementById("imageResult").innerText=
-style+" image prompt: "+prompt
-
-}
-
-/* REPLY */
-
-function generateReply(){
-
-let comment=document.getElementById("commentInput").value
-let tone=document.getElementById("replyTone").value
-
-document.getElementById("replyResult").innerText=
-tone+" reply: Thanks for your comment! 🙌"
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>

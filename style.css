@@ -1,26 +1,44 @@
-body{margin:0;font-family:Arial;background:#f4f6fa;}
-.dark{background:#111;color:white;}
+body{margin:0;font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;}
+.dark{background:#1e1e2f;color:white;}
 
-#app{display:none;}
+/* App hidden until login/trial */
+#app{display:block;}
 
 /* Sidebar */
 .sidebar{
-  width:230px;height:100vh;background:white;position:fixed;padding:20px;display:flex;flex-direction:column;
+  width:250px;height:100vh;background:linear-gradient(180deg,#4CAF50,#2E8B57);position:fixed;padding:20px;display:flex;flex-direction:column;
+  box-shadow:2px 0 10px rgba(0,0,0,0.1);
+  color:white;
 }
-.sidebar button{margin-top:10px;padding:10px;background:#4CAF50;color:white;border:none;cursor:pointer;}
-.profile{text-align:center;margin-bottom:20px;}
-.profile img{width:70px;height:70px;border-radius:50%;}
+.sidebar button{
+  margin-top:10px;padding:12px;background:rgba(255,255,255,0.2);border:none;color:white;font-weight:bold;cursor:pointer;
+  border-radius:8px;transition:0.2s;
+}
+.sidebar button:hover{background:rgba(255,255,255,0.4);}
+.profile{text-align:center;margin-bottom:30px;}
+.profile img{width:80px;height:80px;border-radius:50%;border:2px solid white;box-shadow:0 0 10px rgba(0,0,0,0.2);}
+.profile h3{margin-top:10px;}
 
-.main{margin-left:250px;padding:40px;}
+/* Main Content */
+.main{margin-left:270px;padding:30px;}
 .page{display:none;}
 .page.active{display:block;}
 
-#canvas{width:700px;height:400px;border:2px dashed #ccc;background:white;cursor:crosshair;}
-.helpChat{margin-top:auto;border-top:1px solid #ccc;padding-top:10px;}
+/* Canvas */
+#canvas{width:700px;height:400px;border:2px dashed #ccc;background:white;cursor:crosshair;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+.toolbar button{margin-right:10px;padding:8px 15px;border-radius:6px;border:none;background:#4CAF50;color:white;cursor:pointer;}
+.toolbar button:hover{background:#3e8e41;}
 #layers{margin-top:10px;font-size:14px;}
-textarea,input{width:100%;padding:5px;margin-top:5px;}
-button{border-radius:5px;}
+
+/* Help Chat */
+.helpChat{margin-top:auto;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;}
+.helpChat input{width:100%;padding:5px;margin-top:5px;border-radius:5px;border:none;}
+.helpChat button{margin-top:5px;width:100%;padding:8px;border:none;background:#fff;color:#2E8B57;font-weight:bold;border-radius:5px;cursor:pointer;}
+.helpChat button:hover{background:#eee;}
 
 /* Popup */
 .popup{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;justify-content:center;align-items:center;}
-.popupContent{background:white;padding:30px;border-radius:10px;width:300px;text-align:center;}
+.popupContent{background:white;padding:30px;border-radius:15px;width:350px;text-align:center;box-shadow:0 0 20px rgba(0,0,0,0.3);}
+.popupContent input{width:90%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;}
+.popupContent button{margin:5px;padding:10px 20px;border:none;border-radius:8px;background:#4CAF50;color:white;font-weight:bold;cursor:pointer;transition:0.2s;}
+.popupContent button:hover{background:#3e8e41;}

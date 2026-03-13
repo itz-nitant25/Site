@@ -1,21 +1,36 @@
-body{margin:0;font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;overflow:hidden;}
+body{margin:0; font-family:'Poppins',sans-serif; background:#f4f6fa; color:#333;}
 .dark{background:#1e1e2f;color:white;}
 
-#app{display:flex;height:100vh;width:100vw;}
+/* AUTH */
+.authPage{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;}
+.authPage input{padding:10px;margin:5px;width:250px;border-radius:5px;border:1px solid #ccc;}
+.authPage button{padding:10px 20px;margin:5px;background:#4CAF50;color:white;border:none;cursor:pointer;border-radius:6px;}
+
+/* APP */
+#app{display:flex;height:100vh;}
 
 /* Sidebar */
 .sidebar{
-  width:250px;background:linear-gradient(180deg,#4CAF50,#2E8B57);padding:20px;display:flex;flex-direction:column;
-  box-shadow:2px 0 10px rgba(0,0,0,0.1);color:white;
+  background:linear-gradient(180deg,#4CAF50,#2E8B57);
+  width:230px;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  color:white;
 }
 .sidebar button{
-  margin-top:10px;padding:12px;background:rgba(255,255,255,0.2);border:none;color:white;font-weight:bold;cursor:pointer;
-  border-radius:8px;transition:0.2s;
+  margin-top:10px;
+  padding:12px;
+  border:none;
+  background:rgba(255,255,255,0.2);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  border-radius:8px;
 }
 .sidebar button:hover{background:rgba(255,255,255,0.4);}
-.profile{text-align:center;margin-bottom:30px;}
-.profile img{width:80px;height:80px;border-radius:50%;border:2px solid white;box-shadow:0 0 10px rgba(0,0,0,0.2);}
-.profile h3{margin-top:10px;font-size:18px;}
+.profile{text-align:center;margin-bottom:20px;}
+.profile img{width:80px;height:80px;border-radius:50%;border:2px solid white;}
 
 /* Main Content */
 .main{flex:1;padding:20px;overflow-y:auto;}
@@ -23,13 +38,13 @@ body{margin:0;font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;ove
 .page.active{display:block;}
 
 /* Canvas */
-#canvas{width:100%;height:400px;border:2px dashed #ccc;background:white;cursor:crosshair;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);}
-.toolbar button{margin-right:10px;padding:8px 15px;border-radius:6px;border:none;background:#4CAF50;color:white;cursor:pointer;}
-.toolbar button:hover{background:#3e8e41;}
+#canvasContainer{width:100%;height:500px;border:2px dashed #ccc; background:white;}
+#canvas{width:100%;height:500px;}
 #layers{margin-top:10px;font-size:14px;}
 
-/* Help Chat */
-.helpChat{margin-top:auto;border-top:1px solid rgba(255,255,255,0.3);padding-top:15px;}
-.helpChat input{width:100%;padding:5px;margin-top:5px;border-radius:5px;border:none;}
-.helpChat button{margin-top:5px;width:100%;padding:8px;border:none;background:#fff;color:#2E8B57;font-weight:bold;border-radius:5px;cursor:pointer;}
-.helpChat button:hover{background:#eee;}
+/* Toolbar */
+.toolbar button{padding:8px 15px;background:#4CAF50;color:white;border:none;border-radius:6px;margin-right:8px;cursor:pointer;}
+.toolbar button:hover{background:#3e8e41;}
+
+/* AI Image */
+#imageResult img{max-width:400px;margin-top:10px;}

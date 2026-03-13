@@ -1,7 +1,6 @@
 body{margin:0;font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;}
 .dark{background:#1e1e2f;color:white;}
 
-/* App hidden until login/trial */
 #app{display:block;}
 
 /* Sidebar */
@@ -35,10 +34,3 @@ body{margin:0;font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;}
 .helpChat input{width:100%;padding:5px;margin-top:5px;border-radius:5px;border:none;}
 .helpChat button{margin-top:5px;width:100%;padding:8px;border:none;background:#fff;color:#2E8B57;font-weight:bold;border-radius:5px;cursor:pointer;}
 .helpChat button:hover{background:#eee;}
-
-/* Popup */
-.popup{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;justify-content:center;align-items:center;}
-.popupContent{background:white;padding:30px;border-radius:15px;width:350px;text-align:center;box-shadow:0 0 20px rgba(0,0,0,0.3);}
-.popupContent input{width:90%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;}
-.popupContent button{margin:5px;padding:10px 20px;border:none;border-radius:8px;background:#4CAF50;color:white;font-weight:bold;cursor:pointer;transition:0.2s;}
-.popupContent button:hover{background:#3e8e41;}

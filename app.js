@@ -1,6 +1,5 @@
 let canvas,ctx,drawing=false,layers=[];
 
-// Check trial and show popup if expired
 function checkTrial(){
   let trialStart = localStorage.getItem("trialStart");
   if(!trialStart){
@@ -11,20 +10,19 @@ function checkTrial(){
   let diff = now - parseInt(trialStart);
   let oneDay = 24*60*60*1000;
   if(diff>oneDay){
+    // Only show popup if trial expired
     document.getElementById("trialPopup").style.display="flex";
     return false;
   }
   return true;
 }
 
-window.onload = function(){
-  // Initialize app only if trial valid
+window.onload=function(){
   if(checkTrial()){
     let user = localStorage.getItem("user");
     if(user){startApp(JSON.parse(user));}
   }
 
-  // Canvas
   canvas=document.getElementById("canvas");
   if(canvas){
     ctx=canvas.getContext("2d");
@@ -35,7 +33,6 @@ window.onload = function(){
   }
 }
 
-// Popup login/signup
 function popupLogin(){
   let name = document.getElementById("popupName").value;
   let pass = document.getElementById("popupPass").value;
@@ -57,7 +54,6 @@ function popupSignUp(){
   }
 }
 
-// Start app
 function startApp(user){
   document.getElementById("trialPopup").style.display="none";
   document.getElementById("app").style.display="block";

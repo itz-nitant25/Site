@@ -1,93 +1,27 @@
-body{
-margin:0;
-font-family:Arial;
-background:#f4f6fa;
-}
+body{margin:0;font-family:Arial;background:#f4f6fa;}
+.dark{background:#111;color:white;}
 
-.dark{
-background:#1e1e1e;
-color:white;
-}
+#loginPage{text-align:center;margin-top:150px;}
+#app{display:none;}
 
-#loginPage{
-text-align:center;
-margin-top:150px;
-}
-
-#app{
-display:none;
-}
-
-/* SIDEBAR */
-
+/* Sidebar */
 .sidebar{
-width:230px;
-height:100vh;
-background:white;
-position:fixed;
-padding:20px;
-display:flex;
-flex-direction:column;
+width:230px;height:100vh;background:white;position:fixed;padding:20px;display:flex;flex-direction:column;
 }
+.sidebar button{margin-top:10px;padding:10px;background:#4CAF50;color:white;border:none;cursor:pointer;}
 
-.sidebar button{
-margin-top:10px;
-padding:10px;
-border:none;
-background:#4CAF50;
-color:white;
-cursor:pointer;
-}
+.profile{text-align:center;margin-bottom:20px;}
+.profile img{width:70px;height:70px;border-radius:50%;}
 
-/* PROFILE */
+.main{margin-left:250px;padding:40px;}
+.page{display:none;}
+.page.active{display:block;}
 
-.profile{
-text-align:center;
-margin-bottom:20px;
-}
+/* Canvas */
+#canvas{width:700px;height:400px;border:2px dashed #ccc;background:white;cursor:crosshair;}
 
-.profile img{
-width:70px;
-height:70px;
-border-radius:50%;
-}
-
-/* MAIN */
-
-.main{
-margin-left:250px;
-padding:40px;
-}
-
-/* PAGE */
-
-.page{
-display:none;
-}
-
-.page.active{
-display:block;
-}
-
-/* HELP CHAT */
-
-.helpChat{
-margin-top:auto;
-border-top:1px solid #ddd;
-padding-top:10px;
-}
-
-.helpChat input{
-width:100%;
-padding:5px;
-}
-
-/* CANVAS */
-
-#canvas{
-width:700px;
-height:400px;
-border:2px dashed #ccc;
-background:white;
-cursor:crosshair;
-}
+/* Help Chat */
+.helpChat{margin-top:auto;border-top:1px solid #ccc;padding-top:10px;}
+#layers{margin-top:10px;font-size:14px;}
+textarea,input{width:100%;padding:5px;margin-top:5px;}
+button{border-radius:5px;}

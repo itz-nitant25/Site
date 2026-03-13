@@ -1,124 +1,94 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
 <title>ToolPilot AI</title>
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-
 <!-- LOGIN -->
-
 <div id="loginPage">
-
 <h1>ToolPilot AI</h1>
-
-<input id="nameInput" placeholder="Your name">
-
-<input id="picInput" placeholder="Profile image URL">
-
+<input id="nameInput" placeholder="Your Name">
+<input id="picInput" placeholder="Profile Image URL">
 <button onclick="login()">Enter Dashboard</button>
-
 </div>
 
-
-
 <!-- APP -->
-
 <div id="app">
 
-<!-- SIDEBAR -->
-
 <div class="sidebar">
-
 <div class="profile">
-
 <img id="profilePic">
-
 <h3 id="profileName"></h3>
-
 </div>
 
 <button onclick="openPage('dashboard')">Dashboard</button>
 <button onclick="openPage('editor')">Editor</button>
+<button onclick="openPage('ai')">AI Chat</button>
+<button onclick="openPage('imageAI')">AI Image</button>
 <button onclick="openPage('settings')">Settings</button>
 
 <div class="helpChat">
-
-<h4>AI Help</h4>
-
+<h4>Help AI</h4>
 <input id="helpInput" placeholder="Ask AI">
-
 <button onclick="helpAI()">Send</button>
-
 <div id="helpResult"></div>
-
 </div>
 
 </div>
-
-
-
-<!-- MAIN AREA -->
 
 <div class="main">
 
-
 <!-- DASHBOARD -->
-
 <div id="dashboard" class="page">
-
 <h1 id="welcomeMsg"></h1>
-
-<p>Welcome to ToolPilot AI</p>
-
+<p>Welcome to ToolPilot AI SaaS</p>
 </div>
 
-
-
-<!-- EDITOR -->
-
+<!-- CANVAS EDITOR -->
 <div id="editor" class="page">
-
 <h2>Design Editor</h2>
-
 <div class="toolbar">
-
 <button onclick="drawMode()">Draw</button>
 <button onclick="addText()">Text</button>
+<button onclick="uploadImage()">Upload Image</button>
+<button onclick="exportPNG()">Export PNG</button>
 <button onclick="clearCanvas()">Clear</button>
-
 </div>
-
 <canvas id="canvas"></canvas>
-
+<div id="layers"></div>
 </div>
 
+<!-- AI CHAT -->
+<div id="ai" class="page">
+<h2>AI Chat</h2>
+<textarea id="prompt"></textarea>
+<button onclick="askAI()">Send</button>
+<div id="result"></div>
+</div>
 
+<!-- AI IMAGE GENERATOR -->
+<div id="imageAI" class="page">
+<h2>AI Image Generator</h2>
+<input id="imgPrompt" placeholder="Describe Image">
+<button onclick="generateImage()">Generate</button>
+<div id="imageResult"></div>
+</div>
 
 <!-- SETTINGS -->
-
 <div id="settings" class="page">
-
 <h2>Settings</h2>
-
 <button onclick="toggleDark()">Dark Mode</button>
-
 <button onclick="logout()">Logout</button>
-
-</div>
-
-
 </div>
 
 </div>
 
+</div>
 
 <script src="script.js"></script>
-
 </body>
 </html>

@@ -1,11 +1,11 @@
 let canvas,ctx,drawing=false,layers=[];
 
-// Trial check
+// Check trial and show popup if expired
 function checkTrial(){
   let trialStart = localStorage.getItem("trialStart");
   if(!trialStart){
     localStorage.setItem("trialStart", Date.now());
-    return true; // trial active
+    return true;
   }
   let now = Date.now();
   let diff = now - parseInt(trialStart);
@@ -17,12 +17,14 @@ function checkTrial(){
   return true;
 }
 
-// On load
-window.onload=function(){
+window.onload = function(){
+  // Initialize app only if trial valid
   if(checkTrial()){
     let user = localStorage.getItem("user");
     if(user){startApp(JSON.parse(user));}
   }
+
+  // Canvas
   canvas=document.getElementById("canvas");
   if(canvas){
     ctx=canvas.getContext("2d");
@@ -33,12 +35,11 @@ window.onload=function(){
   }
 }
 
-// Login / Signup
+// Popup login/signup
 function popupLogin(){
   let name = document.getElementById("popupName").value;
   let pass = document.getElementById("popupPass").value;
   if(name && pass){
-    alert("Logged in!");
     document.getElementById("trialPopup").style.display="none";
     localStorage.setItem("user", JSON.stringify({name:name,pic:"https://via.placeholder.com/70"}));
     startApp(JSON.parse(localStorage.getItem("user")));
@@ -49,7 +50,6 @@ function popupSignUp(){
   let name = document.getElementById("popupName").value;
   let pass = document.getElementById("popupPass").value;
   if(name && pass){
-    alert("Signed up!");
     document.getElementById("trialPopup").style.display="none";
     localStorage.setItem("trialStart", Date.now());
     localStorage.setItem("user", JSON.stringify({name:name,pic:"https://via.placeholder.com/70"}));
@@ -57,7 +57,7 @@ function popupSignUp(){
   }
 }
 
-// Start App
+// Start app
 function startApp(user){
   document.getElementById("trialPopup").style.display="none";
   document.getElementById("app").style.display="block";
@@ -67,7 +67,7 @@ function startApp(user){
   openPage("dashboard");
 }
 
-// Nav
+// Navigation
 function openPage(id){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");

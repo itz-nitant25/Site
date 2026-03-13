@@ -7,24 +7,12 @@
 </head>
 <body>
 
-<!-- Trial / Login Popup -->
-<div id="trialPopup" class="popup">
-  <div class="popupContent">
-    <h2>Trial Expired</h2>
-    <p>Your 1-day free trial has ended. Please login or sign up to continue.</p>
-    <input id="popupName" placeholder="Name / Email">
-    <input id="popupPass" placeholder="Password" type="password">
-    <button onclick="popupLogin()">Login</button>
-    <button onclick="popupSignUp()">Sign Up</button>
-  </div>
-</div>
-
 <!-- App -->
 <div id="app">
   <div class="sidebar">
     <div class="profile">
       <img id="profilePic" src="https://via.placeholder.com/70">
-      <h3 id="profileName"></h3>
+      <h3 id="profileName">Guest</h3>
     </div>
     <button onclick="openPage('dashboard')">Dashboard</button>
     <button onclick="openPage('editor')">Editor</button>
@@ -41,8 +29,8 @@
   </div>
 
   <div class="main">
-    <div id="dashboard" class="page">
-      <h1 id="welcomeMsg"></h1>
+    <div id="dashboard" class="page active">
+      <h1 id="welcomeMsg">Hi Guest</h1>
       <p>Welcome to ToolPilot AI SaaS</p>
     </div>
 

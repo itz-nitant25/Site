@@ -1,65 +1,151 @@
-let canvas,ctx,drawing=false,layers=[];
+// ----- FIREBASE SETUP -----
+const firebaseConfig = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_FIREBASE_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "YOUR_FIREBASE_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-window.onload=function(){
-  startApp({name:"Guest",pic:"https://via.placeholder.com/70"});
+// LOGIN & SIGNUP
+function login(){
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
+  auth.signInWithEmailAndPassword(email,password)
+    .then(res => startApp(res.user))
+    .catch(err => alert(err.message));
+}
+function signup(){
+  const email=document.getElementById("email").value;
+  const password=document.getElementById("password").value;
+  auth.createUserWithEmailAndPassword(email,password)
+    .then(res => startApp(res.user))
+    .catch(err => alert(err.message));
+}
 
+auth.onAuthStateChanged(user => {
+  if(user) startApp(user);
+});
+
+// START APP
+function startApp(user){
+  document.getElementById("loginPage").style.display="none";
+  document.getElementById("app").style.display="flex";
+  const username = user.email.split('@')[0];
+  document.getElementById("profileName").innerText=username;
+  document.getElementById("welcomeMsg").innerText="Hi "+username;
+}
+
+// NAVIGATION
+function openPage(id){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+function logout(){
+  auth.signOut().then(()=>location.reload());
+}
+function toggleDark(){
+  document.body.classList.toggle("dark");
+}
+
+// ----- CANVAS EDITOR -----
+let canvas,ctx,drawing=false,objects=[],selectedTool="";
+
+window.onload = function(){
   canvas=document.getElementById("canvas");
-  if(canvas){
-    ctx=canvas.getContext("2d");
-    canvas.width=canvas.offsetWidth;
-    canvas.height=400;
-    canvas.addEventListener("mousedown",startDraw);
-    canvas.addEventListener("mousemove",draw);
-    canvas.addEventListener("mouseup",stopDraw);
+  ctx = canvas.getContext("2d");
+  canvas.width = canvas.offsetWidth;
+  canvas.height = 500;
+
+  canvas.onmousedown = function(e){
+    if(selectedTool==="draw"){
+      drawing=true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX,e.offsetY);
+    }
+  }
+  canvas.onmousemove = function(e){
+    if(drawing && selectedTool==="draw"){
+      ctx.lineTo(e.offsetX,e.offsetY);
+      ctx.stroke();
+    }
+  }
+  canvas.onmouseup = function(){
+    drawing=false;
   }
 }
 
-function startApp(user){
-  document.getElementById("app").style.display="flex";
-  document.getElementById("profileName").innerText=user.name;
-  document.getElementById("profilePic").src=user.pic;
-  document.getElementById("welcomeMsg").innerText="Hi "+user.name;
-  openPage("dashboard");
+// DRAW TOOL
+function drawMode(){selectedTool="draw";}
+
+// TEXT
+function addText(){
+  let text = prompt("Enter text:");
+  if(text){
+    ctx.font="24px Arial";
+    ctx.fillText(text,50,50);
+    objects.push({type:"text",value:text});
+    updateLayers();
+  }
 }
 
-// Navigation
-function openPage(id){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+// UPLOAD IMAGE
+function uploadImage(){
+  const input=document.createElement("input");
+  input.type="file";
+  input.onchange = function(e){
+    const file=e.target.files[0];
+    let img=new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      objects.push({type:"image",src:img.src});
+      updateLayers();
+    }
+  }
+  input.click();
 }
 
-// Settings
-function toggleDark(){document.body.classList.toggle("dark");}
-function logout(){location.reload();}
+// EXPORT PNG
+function exportPNG(){
+  const link=document.createElement("a");
+  link.download="toolpilot_design.png";
+  link.href=canvas.toDataURL();
+  link.click();
+}
 
-// Help AI
-function helpAI(){let q=document.getElementById("helpInput").value;document.getElementById("helpResult").innerText="AI: Use Editor / AI tools!";}
+// CLEAR
+function clearCanvas(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  objects=[];
+  updateLayers();
+}
 
-// Editor
-function drawMode(){drawing=true;}
-function startDraw(e){drawing=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);}
-function draw(e){if(!drawing)return;ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}
-function stopDraw(){drawing=false;}
-function addText(){let text=prompt("Enter text");ctx.font="20px Arial";ctx.fillText(text,100,100);layers.push("Text: "+text);updateLayers();}
-function uploadImage(){let input=document.createElement("input");input.type="file";input.onchange=function(e){let file=e.target.files[0];let img=new Image();img.src=URL.createObjectURL(file);img.onload=function(){ctx.drawImage(img,50,50,200,200);layers.push("Image");updateLayers();}};input.click();}
-function exportPNG(){let link=document.createElement("a");link.download="design.png";link.href=canvas.toDataURL();link.click();}
-function clearCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height);layers=[];updateLayers();}
-function updateLayers(){document.getElementById("layers").innerText="Layers: "+layers.join(" | ");}
+// LAYERS
+function updateLayers(){
+  document.getElementById("layers").innerText="Layers: "+objects.map(o=>o.type).join(" | ");
+}
 
-// AI Chat
-async function askAI(){
-  let prompt=document.getElementById("prompt").value;
-  document.getElementById("result").innerText="Thinking...";
-  const res=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer YOUR_API_KEY"},body:JSON.stringify({model:"gpt-4o-mini",messages:[{role:"user",content:prompt}]})});
+// ----- REAL AI IMAGE GENERATOR -----
+async function generateAIImage(){
+  let prompt = document.getElementById("imgPrompt").value;
+  document.getElementById("imageResult").innerText="Generating...";
+  const res=await fetch("https://api.openai.com/v1/images/generations",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":"Bearer YOUR_OPENAI_KEY"
+    },
+    body:JSON.stringify({
+      model:"gpt-image-1",
+      prompt:prompt,
+      size:"1024x1024"
+    })
+  });
   const data=await res.json();
-  document.getElementById("result").innerText=data.choices[0].message.content;
-}
-
-// AI Image
-async function generateImage(){
-  let prompt=document.getElementById("imgPrompt").value;
-  const res=await fetch("https://api.openai.com/v1/images/generations",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer YOUR_API_KEY"},body:JSON.stringify({model:"gpt-image-1",prompt:prompt,size:"1024x1024"})});
-  const data=await res.json();
-  let img=document.createElement("img"); img.src=data.data[0].url; img.width=400;
-  document.getElementById("imageResult").innerHTML=""; document.getElementById("imageResult").appendChild(img);
+  const imgUrl=data.data[0].url;
+  document.getElementById("imageResult").innerHTML=`<img src="${imgUrl}">`;
 }

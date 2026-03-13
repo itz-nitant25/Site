@@ -4,67 +4,78 @@
 <meta charset="UTF-8">
 <title>ToolPilot AI SaaS</title>
 <link rel="stylesheet" href="style.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
 </head>
 <body>
 
-<div id="app">
+<!-- LOGIN/SIGNUP UI -->
+<div id="loginPage" class="authPage">
+  <h2>ToolPilot AI Login</h2>
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <button onclick="signup()">Sign Up</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none">
+
   <div class="sidebar">
     <div class="profile">
-      <img id="profilePic" src="https://via.placeholder.com/70">
-      <h3 id="profileName">Guest</h3>
+      <img id="profilePic" src="https://via.placeholder.com/80">
+      <h3 id="profileName">User</h3>
     </div>
     <button onclick="openPage('dashboard')">Dashboard</button>
     <button onclick="openPage('editor')">Editor</button>
-    <button onclick="openPage('ai')">AI Chat</button>
-    <button onclick="openPage('imageAI')">AI Image</button>
+    <button onclick="openPage('aiImage')">AI Image</button>
     <button onclick="openPage('settings')">Settings</button>
-
-    <div class="helpChat">
-      <h4>Help AI</h4>
-      <input id="helpInput" placeholder="Ask AI">
-      <button onclick="helpAI()">Send</button>
-      <div id="helpResult"></div>
-    </div>
   </div>
 
   <div class="main">
+
+    <!-- DASHBOARD -->
     <div id="dashboard" class="page active">
-      <h1 id="welcomeMsg">Hi Guest</h1>
+      <h1 id="welcomeMsg">Hi Bro</h1>
       <p>Welcome to ToolPilot AI SaaS</p>
     </div>
 
+    <!-- CANVAS EDITOR -->
     <div id="editor" class="page">
       <h2>Design Editor</h2>
       <div class="toolbar">
+        <button onclick="selectTool('move')">Move</button>
         <button onclick="drawMode()">Draw</button>
         <button onclick="addText()">Text</button>
         <button onclick="uploadImage()">Upload Image</button>
+        <button onclick="applyFilter('grayscale')">Grayscale</button>
+        <button onclick="applyFilter('sepia')">Sepia</button>
         <button onclick="exportPNG()">Export PNG</button>
-        <button onclick="clearCanvas()">Clear</button>
       </div>
-      <canvas id="canvas"></canvas>
+      <div id="canvasContainer">
+        <canvas id="canvas"></canvas>
+      </div>
       <div id="layers"></div>
     </div>
 
-    <div id="ai" class="page">
-      <h2>AI Chat</h2>
-      <textarea id="prompt"></textarea>
-      <button onclick="askAI()">Send</button>
-      <div id="result"></div>
-    </div>
-
-    <div id="imageAI" class="page">
+    <!-- AI IMAGE GENERATOR -->
+    <div id="aiImage" class="page">
       <h2>AI Image Generator</h2>
-      <input id="imgPrompt" placeholder="Describe Image">
-      <button onclick="generateImage()">Generate</button>
+      <input id="imgPrompt" placeholder="Describe image..." />
+      <button onclick="generateAIImage()">Generate</button>
       <div id="imageResult"></div>
     </div>
 
+    <!-- SETTINGS -->
     <div id="settings" class="page">
       <h2>Settings</h2>
       <button onclick="toggleDark()">Dark Mode</button>
       <button onclick="logout()">Logout</button>
     </div>
+
   </div>
 </div>
 

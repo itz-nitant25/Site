@@ -1,28 +1,10 @@
 let canvas,ctx,drawing=false,layers=[];
 
-function checkTrial(){
-  let trialStart = localStorage.getItem("trialStart");
-  if(!trialStart){
-    localStorage.setItem("trialStart", Date.now());
-    return true;
-  }
-  let now = Date.now();
-  let diff = now - parseInt(trialStart);
-  let oneDay = 24*60*60*1000;
-  if(diff>oneDay){
-    // Only show popup if trial expired
-    document.getElementById("trialPopup").style.display="flex";
-    return false;
-  }
-  return true;
-}
-
 window.onload=function(){
-  if(checkTrial()){
-    let user = localStorage.getItem("user");
-    if(user){startApp(JSON.parse(user));}
-  }
+  // Set guest user by default
+  startApp({name:"Guest",pic:"https://via.placeholder.com/70"});
 
+  // Canvas
   canvas=document.getElementById("canvas");
   if(canvas){
     ctx=canvas.getContext("2d");
@@ -33,29 +15,7 @@ window.onload=function(){
   }
 }
 
-function popupLogin(){
-  let name = document.getElementById("popupName").value;
-  let pass = document.getElementById("popupPass").value;
-  if(name && pass){
-    document.getElementById("trialPopup").style.display="none";
-    localStorage.setItem("user", JSON.stringify({name:name,pic:"https://via.placeholder.com/70"}));
-    startApp(JSON.parse(localStorage.getItem("user")));
-  }
-}
-
-function popupSignUp(){
-  let name = document.getElementById("popupName").value;
-  let pass = document.getElementById("popupPass").value;
-  if(name && pass){
-    document.getElementById("trialPopup").style.display="none";
-    localStorage.setItem("trialStart", Date.now());
-    localStorage.setItem("user", JSON.stringify({name:name,pic:"https://via.placeholder.com/70"}));
-    startApp(JSON.parse(localStorage.getItem("user")));
-  }
-}
-
 function startApp(user){
-  document.getElementById("trialPopup").style.display="none";
   document.getElementById("app").style.display="block";
   document.getElementById("profileName").innerText=user.name;
   document.getElementById("profilePic").src=user.pic;
@@ -71,7 +31,7 @@ function openPage(id){
 
 // Settings
 function toggleDark(){document.body.classList.toggle("dark");}
-function logout(){localStorage.removeItem("user");location.reload();}
+function logout(){location.reload();}
 
 // Help AI
 function helpAI(){let q=document.getElementById("helpInput").value;document.getElementById("helpResult").innerText="AI: Use Editor / AI tools!";}

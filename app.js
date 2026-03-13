@@ -1,62 +1,66 @@
-// FIREBASE CONFIG
+// FIREBASE
+
 const firebaseConfig = {
+
 apiKey:"YOUR_FIREBASE_KEY",
 authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT",
-appId:"YOUR_APP_ID"
+projectId:"YOUR_PROJECT"
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
 
-// GOOGLE LOGIN
-function googleLogin(){
+function login(){
 
-auth.signInWithPopup(provider)
-.then(res=>{
+let email=document.getElementById("email").value
+let password=document.getElementById("password").value
 
-const user=res.user;
+auth.signInWithEmailAndPassword(email,password)
 
-document.getElementById("profileName").innerText=user.displayName;
-
-document.getElementById("profilePic").src=user.photoURL;
-
-document.getElementById("welcomeMsg").innerText="Hi "+user.displayName;
-
-document.getElementById("loginPopup").style.display="none";
-
-})
+.then(res=>startApp(res.user))
 
 }
 
-// LOGOUT
-function logout(){
+function signup(){
 
-auth.signOut().then(()=>{
+let email=document.getElementById("email").value
+let password=document.getElementById("password").value
 
-location.reload()
+auth.createUserWithEmailAndPassword(email,password)
 
-})
+.then(res=>startApp(res.user))
 
 }
 
-// FREE TRIAL TIMER
+function startApp(user){
 
-setTimeout(()=>{
+document.getElementById("loginPage").style.display="none"
+document.getElementById("app").style.display="flex"
 
-document.getElementById("loginPopup").style.display="flex"
+let name=user.email.split("@")[0]
 
-},120000)
+document.getElementById("username").innerText=name
+document.getElementById("welcome").innerText="Hi "+name
+
+}
 
 // NAVIGATION
 
-function openPage(id){
+function showPage(id){
 
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
 
 document.getElementById(id).classList.add("active")
+
+}
+
+// LOGOUT
+
+function logout(){
+
+auth.signOut().then(()=>location.reload())
 
 }
 
@@ -68,68 +72,30 @@ document.body.classList.toggle("dark")
 
 }
 
-// CANVAS
+// FABRIC CANVAS
 
-let canvas=document.getElementById("canvas")
-
-let ctx
-
-let drawing=false
-
-window.onload=()=>{
-
-canvas=document.getElementById("canvas")
-
-ctx=canvas.getContext("2d")
-
-canvas.width=canvas.offsetWidth
-
-canvas.height=500
-
-canvas.onmousedown=e=>{
-
-drawing=true
-
-ctx.beginPath()
-
-ctx.moveTo(e.offsetX,e.offsetY)
-
-}
-
-canvas.onmousemove=e=>{
-
-if(!drawing)return
-
-ctx.lineTo(e.offsetX,e.offsetY)
-
-ctx.stroke()
-
-}
-
-canvas.onmouseup=()=>{
-
-drawing=false
-
-}
-
-}
-
-// DRAW TOOL
-function drawMode(){}
-
-// TEXT
+let canvas = new fabric.Canvas('canvas')
 
 function addText(){
 
-let text=prompt("Enter text")
+let text=new fabric.IText("Your Text",{
 
-ctx.font="24px Arial"
+left:100,
+top:100
 
-ctx.fillText(text,100,100)
+})
+
+canvas.add(text)
+
+updateLayers()
 
 }
 
-// UPLOAD IMAGE
+function drawMode(){
+
+canvas.isDrawingMode=true
+
+}
 
 function uploadImage(){
 
@@ -141,15 +107,23 @@ input.onchange=e=>{
 
 const file=e.target.files[0]
 
-const img=new Image()
+const reader=new FileReader()
 
-img.src=URL.createObjectURL(file)
+reader.onload=function(f){
 
-img.onload=()=>{
+fabric.Image.fromURL(f.target.result,function(img){
 
-ctx.drawImage(img,0,0,canvas.width,canvas.height)
+img.scaleToWidth(300)
+
+canvas.add(img)
+
+updateLayers()
+
+})
 
 }
+
+reader.readAsDataURL(file)
 
 }
 
@@ -157,24 +131,78 @@ input.click()
 
 }
 
-// EXPORT
+function grayscale(){
+
+let obj=canvas.getActiveObject()
+
+if(!obj) return
+
+obj.filters=[new fabric.Image.filters.Grayscale()]
+
+obj.applyFilters()
+
+canvas.renderAll()
+
+}
 
 function exportPNG(){
 
-const link=document.createElement("a")
+let url=canvas.toDataURL()
 
+let link=document.createElement("a")
+
+link.href=url
 link.download="design.png"
-
-link.href=canvas.toDataURL()
 
 link.click()
 
 }
 
+// LAYERS
+
+function updateLayers(){
+
+let list="Layers: "
+
+canvas.getObjects().forEach((obj,i)=>{
+
+list += obj.type+" "
+
+})
+
+document.getElementById("layers").innerText=list
+
+}
+
 // AI IMAGE
 
-async function generateAIImage(){
+async function generateImage(){
 
-document.getElementById("loginPopup").style.display="flex"
+let prompt=document.getElementById("prompt").value
+
+let res=await fetch("https://api.openai.com/v1/images/generations",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer YOUR_OPENAI_KEY"
+},
+
+body:JSON.stringify({
+
+model:"gpt-image-1",
+prompt:prompt,
+size:"1024x1024"
+
+})
+
+})
+
+let data=await res.json()
+
+document.getElementById("result").innerHTML=
+
+`<img src="${data.data[0].url}" width="400">`
 
 }

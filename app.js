@@ -1,9 +1,11 @@
-// FIREBASE
+// FIREBASE CONFIG
 
 const firebaseConfig = {
 
 apiKey:"YOUR_FIREBASE_KEY",
+
 authDomain:"YOUR_PROJECT.firebaseapp.com",
+
 projectId:"YOUR_PROJECT"
 
 };
@@ -12,9 +14,12 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 
+// LOGIN
+
 function login(){
 
 let email=document.getElementById("email").value
+
 let password=document.getElementById("password").value
 
 auth.signInWithEmailAndPassword(email,password)
@@ -23,9 +28,12 @@ auth.signInWithEmailAndPassword(email,password)
 
 }
 
+// SIGNUP
+
 function signup(){
 
 let email=document.getElementById("email").value
+
 let password=document.getElementById("password").value
 
 auth.createUserWithEmailAndPassword(email,password)
@@ -34,25 +42,19 @@ auth.createUserWithEmailAndPassword(email,password)
 
 }
 
+// START APP
+
 function startApp(user){
 
 document.getElementById("loginPage").style.display="none"
+
 document.getElementById("app").style.display="flex"
 
 let name=user.email.split("@")[0]
 
 document.getElementById("username").innerText=name
+
 document.getElementById("welcome").innerText="Hi "+name
-
-}
-
-// NAVIGATION
-
-function showPage(id){
-
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
-
-document.getElementById(id).classList.add("active")
 
 }
 
@@ -64,21 +66,37 @@ auth.signOut().then(()=>location.reload())
 
 }
 
-// DARK MODE
+// PAGE NAVIGATION
 
-function toggleDark(){
+function openPage(id){
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
+
+document.getElementById(id).classList.add("active")
+
+}
+
+// THEME
+
+function toggleTheme(){
 
 document.body.classList.toggle("dark")
 
 }
 
-// FABRIC CANVAS
+// IMAGE EDITOR
 
 let canvas = new fabric.Canvas('canvas')
 
+function drawMode(){
+
+canvas.isDrawingMode=true
+
+}
+
 function addText(){
 
-let text=new fabric.IText("Your Text",{
+let text=new fabric.IText("Text",{
 
 left:100,
 top:100
@@ -88,12 +106,6 @@ top:100
 canvas.add(text)
 
 updateLayers()
-
-}
-
-function drawMode(){
-
-canvas.isDrawingMode=true
 
 }
 
@@ -131,7 +143,7 @@ input.click()
 
 }
 
-function grayscale(){
+function applyFilter(){
 
 let obj=canvas.getActiveObject()
 
@@ -147,26 +159,23 @@ canvas.renderAll()
 
 function exportPNG(){
 
-let url=canvas.toDataURL()
-
 let link=document.createElement("a")
 
-link.href=url
+link.href=canvas.toDataURL()
+
 link.download="design.png"
 
 link.click()
 
 }
 
-// LAYERS
-
 function updateLayers(){
 
 let list="Layers: "
 
-canvas.getObjects().forEach((obj,i)=>{
+canvas.getObjects().forEach(o=>{
 
-list += obj.type+" "
+list+=o.type+" "
 
 })
 
@@ -174,35 +183,54 @@ document.getElementById("layers").innerText=list
 
 }
 
-// AI IMAGE
+// VIDEO EDITOR
 
-async function generateImage(){
+const videoUpload=document.getElementById("videoUpload")
 
-let prompt=document.getElementById("prompt").value
+const videoPlayer=document.getElementById("videoPlayer")
 
-let res=await fetch("https://api.openai.com/v1/images/generations",{
+videoUpload.onchange=function(){
 
-method:"POST",
+const file=this.files[0]
 
-headers:{
-"Content-Type":"application/json",
-"Authorization":"Bearer YOUR_OPENAI_KEY"
-},
+videoPlayer.src=URL.createObjectURL(file)
 
-body:JSON.stringify({
+}
 
-model:"gpt-image-1",
-prompt:prompt,
-size:"1024x1024"
+function playVideo(){
 
-})
+videoPlayer.play()
 
-})
+}
 
-let data=await res.json()
+function pauseVideo(){
 
-document.getElementById("result").innerHTML=
+videoPlayer.pause()
 
-`<img src="${data.data[0].url}" width="400">`
+}
+
+function addCaption(){
+
+let text=prompt("Caption text")
+
+let div=document.createElement("div")
+
+div.innerText=text
+
+document.getElementById("videoCaptions").appendChild(div)
+
+}
+
+// CAPTION EDITOR
+
+function copyCaption(){
+
+let text=document.getElementById("captionText")
+
+text.select()
+
+document.execCommand("copy")
+
+alert("Copied")
 
 }

@@ -1,11 +1,9 @@
-// FIREBASE CONFIG
+// FIREBASE
 
 const firebaseConfig = {
 
 apiKey:"YOUR_FIREBASE_KEY",
-
 authDomain:"YOUR_PROJECT.firebaseapp.com",
-
 projectId:"YOUR_PROJECT"
 
 };
@@ -19,7 +17,6 @@ const auth = firebase.auth();
 function login(){
 
 let email=document.getElementById("email").value
-
 let password=document.getElementById("password").value
 
 auth.signInWithEmailAndPassword(email,password)
@@ -28,12 +25,9 @@ auth.signInWithEmailAndPassword(email,password)
 
 }
 
-// SIGNUP
-
 function signup(){
 
 let email=document.getElementById("email").value
-
 let password=document.getElementById("password").value
 
 auth.createUserWithEmailAndPassword(email,password)
@@ -42,18 +36,11 @@ auth.createUserWithEmailAndPassword(email,password)
 
 }
 
-// START APP
-
 function startApp(user){
-
-document.getElementById("loginPage").style.display="none"
-
-document.getElementById("app").style.display="flex"
 
 let name=user.email.split("@")[0]
 
 document.getElementById("username").innerText=name
-
 document.getElementById("welcome").innerText="Hi "+name
 
 }
@@ -62,11 +49,13 @@ document.getElementById("welcome").innerText="Hi "+name
 
 function logout(){
 
-auth.signOut().then(()=>location.reload())
+auth.signOut()
+
+document.getElementById("username").innerText="Guest"
 
 }
 
-// PAGE NAVIGATION
+// NAVIGATION
 
 function openPage(id){
 
@@ -84,9 +73,44 @@ document.body.classList.toggle("dark")
 
 }
 
-// IMAGE EDITOR
+// CANVA EDITOR
 
-let canvas = new fabric.Canvas('canvas')
+let canvas=new fabric.Canvas("canvas")
+
+let history=[]
+let redoStack=[]
+
+function saveState(){
+
+history.push(JSON.stringify(canvas))
+
+}
+
+canvas.on("object:added",saveState)
+
+function undo(){
+
+if(history.length<2)return
+
+redoStack.push(history.pop())
+
+canvas.loadFromJSON(history[history.length-1])
+
+}
+
+function redo(){
+
+if(!redoStack.length)return
+
+let state=redoStack.pop()
+
+history.push(state)
+
+canvas.loadFromJSON(state)
+
+}
+
+// DRAW
 
 function drawMode(){
 
@@ -94,20 +118,35 @@ canvas.isDrawingMode=true
 
 }
 
+// TEXT
+
 function addText(){
 
-let text=new fabric.IText("Text",{
-
-left:100,
-top:100
-
-})
+let text=new fabric.IText("Text",{left:100,top:100})
 
 canvas.add(text)
 
-updateLayers()
+}
+
+// SHAPE
+
+function addRectangle(){
+
+let rect=new fabric.Rect({
+
+left:150,
+top:150,
+fill:"blue",
+width:80,
+height:80
+
+})
+
+canvas.add(rect)
 
 }
+
+// UPLOAD IMAGE
 
 function uploadImage(){
 
@@ -121,15 +160,13 @@ const file=e.target.files[0]
 
 const reader=new FileReader()
 
-reader.onload=function(f){
+reader.onload=f=>{
 
-fabric.Image.fromURL(f.target.result,function(img){
+fabric.Image.fromURL(f.target.result,img=>{
 
 img.scaleToWidth(300)
 
 canvas.add(img)
-
-updateLayers()
 
 })
 
@@ -143,19 +180,7 @@ input.click()
 
 }
 
-function applyFilter(){
-
-let obj=canvas.getActiveObject()
-
-if(!obj) return
-
-obj.filters=[new fabric.Image.filters.Grayscale()]
-
-obj.applyFilters()
-
-canvas.renderAll()
-
-}
+// EXPORT
 
 function exportPNG(){
 
@@ -169,24 +194,17 @@ link.click()
 
 }
 
-function updateLayers(){
+// REMOVE BG (demo)
 
-let list="Layers: "
+function removeBg(){
 
-canvas.getObjects().forEach(o=>{
-
-list+=o.type+" "
-
-})
-
-document.getElementById("layers").innerText=list
+alert("Background remover AI requires API")
 
 }
 
-// VIDEO EDITOR
+// VIDEO
 
 const videoUpload=document.getElementById("videoUpload")
-
 const videoPlayer=document.getElementById("videoPlayer")
 
 videoUpload.onchange=function(){
@@ -211,7 +229,7 @@ videoPlayer.pause()
 
 function addCaption(){
 
-let text=prompt("Caption text")
+let text=prompt("Caption")
 
 let div=document.createElement("div")
 
@@ -221,16 +239,33 @@ document.getElementById("videoCaptions").appendChild(div)
 
 }
 
-// CAPTION EDITOR
+// AI CAPTION
 
-function copyCaption(){
+async function generateCaption(){
 
-let text=document.getElementById("captionText")
+let prompt=document.getElementById("captionPrompt").value
 
-text.select()
+let res=await fetch("https://api.openai.com/v1/chat/completions",{
 
-document.execCommand("copy")
+method:"POST",
 
-alert("Copied")
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer YOUR_OPENAI_KEY"
+},
+
+body:JSON.stringify({
+
+model:"gpt-4o-mini",
+
+messages:[{role:"user",content:"Write social media caption for "+prompt}]
+
+})
+
+})
+
+let data=await res.json()
+
+document.getElementById("captionText").value=data.choices[0].message.content
 
 }

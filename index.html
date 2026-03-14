@@ -5,9 +5,66 @@
 <meta charset="UTF-8">
 <title>Creator Studio</title>
 
-<link rel="stylesheet" href="style.css">
-
 <script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f4f6f9;
+}
+
+.app{
+display:flex;
+height:100vh;
+}
+
+.sidebar{
+width:220px;
+background:#111;
+color:white;
+padding:20px;
+display:flex;
+flex-direction:column;
+}
+
+.sidebar button{
+margin:6px 0;
+padding:10px;
+border:none;
+background:#333;
+color:white;
+cursor:pointer;
+}
+
+.main{
+flex:1;
+padding:20px;
+}
+
+.page{
+display:none;
+}
+
+.page.active{
+display:block;
+}
+
+.toolbar button{
+margin:5px;
+padding:8px 15px;
+background:#2563eb;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+canvas{
+border:1px solid #ccc;
+}
+
+</style>
 
 </head>
 
@@ -15,42 +72,37 @@
 
 <div class="app">
 
-<!-- SIDEBAR -->
-
 <div class="sidebar">
 
 <h2>Creator</h2>
 
-<button id="btnDashboard">Dashboard</button>
-<button id="btnImage">Image Editor</button>
-<button id="btnVideo">Video Editor</button>
-<button id="btnTheme">Dark Mode</button>
+<button onclick="showPage('dashboard')">Dashboard</button>
+<button onclick="showPage('image')">Image Editor</button>
+<button onclick="showPage('video')">Video Editor</button>
 
 </div>
 
-
-<!-- MAIN -->
 
 <div class="main">
 
 <div id="dashboard" class="page active">
 
 <h1>Welcome Creator 👋</h1>
-<p>Select tool from sidebar</p>
+<p>Select a tool from sidebar</p>
 
 </div>
 
 
-<div id="imagePage" class="page">
+<div id="image" class="page">
 
 <h2>Image Editor</h2>
 
 <div class="toolbar">
 
-<button id="drawBtn">Draw</button>
-<button id="textBtn">Add Text</button>
-<button id="uploadBtn">Upload</button>
-<button id="exportBtn">Export PNG</button>
+<button onclick="draw()">Draw</button>
+<button onclick="addText()">Add Text</button>
+<button onclick="upload()">Upload Image</button>
+<button onclick="exportPNG()">Export</button>
 
 </div>
 
@@ -59,7 +111,7 @@
 </div>
 
 
-<div id="videoPage" class="page">
+<div id="video" class="page">
 
 <h2>Video Editor</h2>
 
@@ -71,8 +123,8 @@
 
 <br><br>
 
-<button id="playBtn">Play</button>
-<button id="pauseBtn">Pause</button>
+<button onclick="playVideo()">Play</button>
+<button onclick="pauseVideo()">Pause</button>
 
 </div>
 
@@ -80,7 +132,112 @@
 
 </div>
 
-<script src="script.js"></script>
+
+<script>
+
+function showPage(id){
+
+document.querySelectorAll(".page").forEach(p=>{
+
+p.classList.remove("active")
+
+})
+
+document.getElementById(id).classList.add("active")
+
+}
+
+
+// CANVAS
+
+const canvas=new fabric.Canvas("canvas")
+
+function draw(){
+
+canvas.isDrawingMode=true
+
+}
+
+function addText(){
+
+const text=new fabric.IText("Text",{left:100,top:100})
+
+canvas.add(text)
+
+}
+
+function upload(){
+
+const input=document.createElement("input")
+
+input.type="file"
+
+input.onchange=e=>{
+
+const file=e.target.files[0]
+
+const reader=new FileReader()
+
+reader.onload=f=>{
+
+fabric.Image.fromURL(f.target.result,img=>{
+
+img.scaleToWidth(300)
+
+canvas.add(img)
+
+})
+
+}
+
+reader.readAsDataURL(file)
+
+}
+
+input.click()
+
+}
+
+function exportPNG(){
+
+const link=document.createElement("a")
+
+link.href=canvas.toDataURL()
+
+link.download="design.png"
+
+link.click()
+
+}
+
+
+// VIDEO
+
+const videoUpload=document.getElementById("videoUpload")
+
+const videoPlayer=document.getElementById("videoPlayer")
+
+videoUpload.onchange=function(){
+
+const file=this.files[0]
+
+videoPlayer.src=URL.createObjectURL(file)
+
+}
+
+function playVideo(){
+
+videoPlayer.play()
+
+}
+
+function pauseVideo(){
+
+videoPlayer.pause()
+
+}
+
+</script>
 
 </body>
 </html>

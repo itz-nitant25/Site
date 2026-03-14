@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Canva Lite Editor</title>
+<title>Creator Studio Pro</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -15,39 +15,21 @@
 
 <body>
 
-<!-- LOGIN -->
-
-<div id="loginPage">
-
-<h2>Login</h2>
-
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-
-<button onclick="login()">Login</button>
-<button onclick="signup()">Sign Up</button>
-
-</div>
-
-<!-- APP -->
-
 <div id="app">
 
 <div class="sidebar">
 
-<h3 id="username">User</h3>
+<h3 id="username">Guest</h3>
 
 <button onclick="openPage('dashboard')">Dashboard</button>
-
 <button onclick="openPage('imageEditor')">Image Editor</button>
-
 <button onclick="openPage('videoEditor')">Video Editor</button>
-
-<button onclick="openPage('captionEditor')">Caption Editor</button>
-
+<button onclick="openPage('captionEditor')">Caption AI</button>
+<button onclick="openPage('loginPage')">Login</button>
 <button onclick="openPage('settings')">Settings</button>
 
 </div>
+
 
 <div class="main">
 
@@ -55,11 +37,12 @@
 
 <div id="dashboard" class="page active">
 
-<h1 id="welcome"></h1>
+<h1 id="welcome">Hi Guest</h1>
 
-<p>Create images, captions, and videos</p>
+<p>Create images, videos and captions.</p>
 
 </div>
+
 
 <!-- IMAGE EDITOR -->
 
@@ -71,11 +54,17 @@
 
 <button onclick="addText()">Text</button>
 
-<button onclick="uploadImage()">Upload Image</button>
+<button onclick="addRectangle()">Rectangle</button>
 
-<button onclick="applyFilter()">Filter</button>
+<button onclick="uploadImage()">Upload</button>
 
-<button onclick="exportPNG()">Export PNG</button>
+<button onclick="removeBg()">Remove BG</button>
+
+<button onclick="undo()">Undo</button>
+
+<button onclick="redo()">Redo</button>
+
+<button onclick="exportPNG()">Export</button>
 
 </div>
 
@@ -85,13 +74,20 @@
 
 </div>
 
+
 <!-- VIDEO EDITOR -->
 
 <div id="videoEditor" class="page">
 
 <input type="file" id="videoUpload">
 
-<video id="videoPlayer" controls width="700"></video>
+<video id="videoPlayer" width="700" controls></video>
+
+<div class="timeline">
+
+<input type="range" id="timeline" min="0" max="100">
+
+</div>
 
 <div class="toolbar">
 
@@ -107,24 +103,40 @@
 
 </div>
 
-<!-- CAPTION EDITOR -->
+
+<!-- CAPTION AI -->
 
 <div id="captionEditor" class="page">
 
-<textarea id="captionText" rows="8" cols="50" placeholder="Write caption"></textarea>
+<input id="captionPrompt" placeholder="Describe caption">
 
-<br>
+<button onclick="generateCaption()">Generate Caption</button>
 
-<button onclick="copyCaption()">Copy Caption</button>
+<textarea id="captionText"></textarea>
 
 </div>
+
+
+<!-- LOGIN -->
+
+<div id="loginPage" class="page">
+
+<h2>Login</h2>
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+<button onclick="signup()">Sign Up</button>
+
+</div>
+
 
 <!-- SETTINGS -->
 
 <div id="settings" class="page">
 
 <button onclick="toggleTheme()">Dark / Light</button>
-
 <button onclick="logout()">Logout</button>
 
 </div>

@@ -2,17 +2,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ToolPilot AI</title>
+<title>Canva Lite Editor</title>
+
+<link rel="stylesheet" href="style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
-<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
+<!-- LOGIN -->
 
 <div id="loginPage">
 
@@ -26,6 +29,7 @@
 
 </div>
 
+<!-- APP -->
 
 <div id="app">
 
@@ -33,29 +37,44 @@
 
 <h3 id="username">User</h3>
 
-<button onclick="showPage('dashboard')">Dashboard</button>
-<button onclick="showPage('editor')">Editor</button>
-<button onclick="showPage('ai')">AI Image</button>
-<button onclick="showPage('settings')">Settings</button>
+<button onclick="openPage('dashboard')">Dashboard</button>
+
+<button onclick="openPage('imageEditor')">Image Editor</button>
+
+<button onclick="openPage('videoEditor')">Video Editor</button>
+
+<button onclick="openPage('captionEditor')">Caption Editor</button>
+
+<button onclick="openPage('settings')">Settings</button>
 
 </div>
-
 
 <div class="main">
 
+<!-- DASHBOARD -->
+
 <div id="dashboard" class="page active">
+
 <h1 id="welcome"></h1>
+
+<p>Create images, captions, and videos</p>
+
 </div>
 
+<!-- IMAGE EDITOR -->
 
-<div id="editor" class="page">
+<div id="imageEditor" class="page">
 
 <div class="toolbar">
 
-<button onclick="addText()">Text</button>
 <button onclick="drawMode()">Draw</button>
-<button onclick="uploadImage()">Upload</button>
-<button onclick="grayscale()">Grayscale</button>
+
+<button onclick="addText()">Text</button>
+
+<button onclick="uploadImage()">Upload Image</button>
+
+<button onclick="applyFilter()">Filter</button>
+
 <button onclick="exportPNG()">Export PNG</button>
 
 </div>
@@ -66,20 +85,46 @@
 
 </div>
 
+<!-- VIDEO EDITOR -->
 
-<div id="ai" class="page">
+<div id="videoEditor" class="page">
 
-<input id="prompt" placeholder="Describe image">
-<button onclick="generateImage()">Generate</button>
+<input type="file" id="videoUpload">
 
-<div id="result"></div>
+<video id="videoPlayer" controls width="700"></video>
+
+<div class="toolbar">
+
+<button onclick="playVideo()">Play</button>
+
+<button onclick="pauseVideo()">Pause</button>
+
+<button onclick="addCaption()">Add Caption</button>
 
 </div>
 
+<div id="videoCaptions"></div>
+
+</div>
+
+<!-- CAPTION EDITOR -->
+
+<div id="captionEditor" class="page">
+
+<textarea id="captionText" rows="8" cols="50" placeholder="Write caption"></textarea>
+
+<br>
+
+<button onclick="copyCaption()">Copy Caption</button>
+
+</div>
+
+<!-- SETTINGS -->
 
 <div id="settings" class="page">
 
-<button onclick="toggleDark()">Dark Mode</button>
+<button onclick="toggleTheme()">Dark / Light</button>
+
 <button onclick="logout()">Logout</button>
 
 </div>

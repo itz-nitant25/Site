@@ -1,31 +1,23 @@
 body{
 margin:0;
 font-family:Arial;
-background:#f4f4f4;
+background:white;
+color:#222;
 }
 
 .dark{
-background:#1e1e1e;
+background:#121212;
 color:white;
 }
 
-#loginPage{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-height:100vh;
-}
-
 #app{
-display:none;
-height:100vh;
 display:flex;
+height:100vh;
 }
 
 .sidebar{
-width:220px;
-background:#222;
+width:230px;
+background:#111;
 color:white;
 padding:20px;
 display:flex;
@@ -35,10 +27,10 @@ flex-direction:column;
 .sidebar button{
 margin:6px 0;
 padding:10px;
+background:#333;
+color:white;
 border:none;
 cursor:pointer;
-background:#444;
-color:white;
 }
 
 .main{
@@ -57,14 +49,23 @@ display:block;
 
 .toolbar button{
 margin:5px;
-padding:8px 15px;
+padding:8px 14px;
+background:#3b82f6;
+color:white;
+border:none;
+cursor:pointer;
 }
 
 #canvas{
-border:2px dashed gray;
+border:2px dashed #ccc;
 background:white;
 }
 
 textarea{
 width:500px;
+height:120px;
+}
+
+.timeline{
+margin:10px 0;
 }

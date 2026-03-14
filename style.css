@@ -1,7 +1,7 @@
 body{
 margin:0;
 font-family:Arial;
-background:#f4f6f9;
+background:#f5f5f5;
 }
 
 .app{
@@ -19,11 +19,11 @@ flex-direction:column;
 }
 
 .sidebar button{
-margin:8px 0;
+margin:6px 0;
 padding:10px;
+border:none;
 background:#333;
 color:white;
-border:none;
 cursor:pointer;
 }
 
@@ -40,32 +40,13 @@ display:none;
 display:block;
 }
 
-.editor{
-display:flex;
-gap:10px;
-}
-
-.tools{
-width:120px;
-background:white;
-padding:10px;
-border-radius:8px;
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.canvasArea{
-background:white;
-padding:10px;
-border-radius:8px;
-}
-
-.layers{
-width:150px;
-background:white;
-padding:10px;
-border-radius:8px;
+.toolbar button{
+margin:5px;
+padding:8px 15px;
+background:#2563eb;
+color:white;
+border:none;
+cursor:pointer;
 }
 
 canvas{

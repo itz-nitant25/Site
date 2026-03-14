@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
-<title>Creator Studio</title>
+<title>Creator Studio Pro</title>
 
+<!-- Fabric -->
 <script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
+
+<!-- Firebase (optional) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <style>
 
 body{
 margin:0;
-font-family:Arial;
-background:#f4f6f9;
+font-family:Segoe UI;
+background:#f4f6fb;
+}
+
+.dark{
+background:#0f172a;
+color:white;
 }
 
 .app{
@@ -21,8 +30,8 @@ height:100vh;
 }
 
 .sidebar{
-width:220px;
-background:#111;
+width:230px;
+background:#111827;
 color:white;
 padding:20px;
 display:flex;
@@ -33,18 +42,77 @@ flex-direction:column;
 margin:6px 0;
 padding:10px;
 border:none;
-background:#333;
+background:#1f2937;
 color:white;
 cursor:pointer;
+border-radius:6px;
+}
+
+.sidebar button:hover{
+background:#374151;
 }
 
 .main{
 flex:1;
-padding:20px;
+display:flex;
+flex-direction:column;
+}
+
+.topbar{
+height:60px;
+background:white;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+border-bottom:1px solid #ddd;
+}
+
+.dark .topbar{
+background:#1e293b;
+}
+
+.workspace{
+flex:1;
+display:flex;
+gap:10px;
+padding:15px;
+}
+
+.tools{
+width:130px;
+background:white;
+padding:10px;
+border-radius:8px;
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.layers{
+width:180px;
+background:white;
+padding:10px;
+border-radius:8px;
+}
+
+.canvasBox{
+flex:1;
+background:white;
+border-radius:8px;
+padding:10px;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+canvas{
+border:1px solid #ddd;
 }
 
 .page{
 display:none;
+height:100%;
 }
 
 .page.active{
@@ -52,74 +120,127 @@ display:block;
 }
 
 .toolbar button{
-margin:5px;
-padding:8px 15px;
+padding:8px;
+border:none;
 background:#2563eb;
 color:white;
-border:none;
 cursor:pointer;
+border-radius:5px;
 }
 
-canvas{
-border:1px solid #ccc;
+.card{
+background:white;
+padding:25px;
+border-radius:10px;
+margin:10px;
+cursor:pointer;
+box-shadow:0 5px 10px rgba(0,0,0,0.1);
+}
+
+.videoPanel{
+background:white;
+padding:20px;
+border-radius:8px;
+}
+
+input,textarea{
+padding:6px;
+margin:5px 0;
+width:100%;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="app">
 
+<!-- SIDEBAR -->
+
 <div class="sidebar">
 
 <h2>Creator</h2>
 
-<button onclick="showPage('dashboard')">Dashboard</button>
-<button onclick="showPage('image')">Image Editor</button>
-<button onclick="showPage('video')">Video Editor</button>
+<button onclick="openPage('dashboard')">🏠 Dashboard</button>
+<button onclick="openPage('image')">🎨 Image Editor</button>
+<button onclick="openPage('video')">🎬 Video Editor</button>
+<button onclick="openPage('ai')">🤖 AI Image</button>
+<button onclick="openPage('login')">🔐 Login</button>
+<button onclick="toggleTheme()">🌙 Theme</button>
 
 </div>
 
+<!-- MAIN -->
 
 <div class="main">
 
+<div class="topbar">
+<h3>Creator Studio</h3>
+<button onclick="saveProject()">💾 Save</button>
+</div>
+
+<!-- DASHBOARD -->
+
 <div id="dashboard" class="page active">
 
-<h1>Welcome Creator 👋</h1>
-<p>Select a tool from sidebar</p>
+<div class="card" onclick="openPage('image')">🎨 Open Image Editor</div>
+<div class="card" onclick="openPage('video')">🎬 Open Video Editor</div>
+<div class="card" onclick="openPage('ai')">🤖 AI Image Generator</div>
 
 </div>
 
+<!-- IMAGE EDITOR -->
 
 <div id="image" class="page">
 
-<h2>Image Editor</h2>
+<div class="workspace">
 
-<div class="toolbar">
+<div class="tools">
 
 <button onclick="draw()">Draw</button>
-<button onclick="addText()">Add Text</button>
-<button onclick="upload()">Upload Image</button>
+<button onclick="addText()">Text</button>
+<button onclick="addRect()">Rectangle</button>
+<button onclick="upload()">Upload</button>
+<button onclick="removeBG()">Remove BG</button>
 <button onclick="exportPNG()">Export</button>
 
+<input type="range" min="1" max="40" id="brush">
+
 </div>
+
+<div class="canvasBox">
 
 <canvas id="canvas" width="800" height="450"></canvas>
 
 </div>
 
+<div class="layers">
+
+<h4>Layers</h4>
+<ul id="layerList"></ul>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- VIDEO EDITOR -->
 
 <div id="video" class="page">
 
-<h2>Video Editor</h2>
+<div class="videoPanel">
 
 <input type="file" id="videoUpload">
 
 <br><br>
 
 <video id="videoPlayer" width="700" controls></video>
+
+<br><br>
+
+<input type="range" id="timeline" min="0" max="100">
 
 <br><br>
 
@@ -130,111 +251,207 @@ border:1px solid #ccc;
 
 </div>
 
+<!-- AI IMAGE -->
+
+<div id="ai" class="page">
+
+<h3>AI Image Generator</h3>
+
+<input id="prompt" placeholder="Describe image">
+
+<button onclick="generateAI()">Generate</button>
+
+<br><br>
+
+<img id="aiImage" width="400">
+
 </div>
 
+<!-- LOGIN -->
+
+<div id="login" class="page">
+
+<h3>Login</h3>
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+<button onclick="signup()">Sign Up</button>
+
+</div>
+
+</div>
+
+</div>
 
 <script>
 
-function showPage(id){
+// PAGE SWITCH
 
-document.querySelectorAll(".page").forEach(p=>{
-
-p.classList.remove("active")
-
-})
-
+function openPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
 document.getElementById(id).classList.add("active")
-
 }
 
+// THEME
+
+function toggleTheme(){
+document.body.classList.toggle("dark")
+}
 
 // CANVAS
 
 const canvas=new fabric.Canvas("canvas")
 
+// DRAW
+
 function draw(){
-
 canvas.isDrawingMode=true
-
+canvas.freeDrawingBrush.width=document.getElementById("brush").value
 }
+
+// TEXT
 
 function addText(){
-
-const text=new fabric.IText("Text",{left:100,top:100})
-
-canvas.add(text)
-
+const t=new fabric.IText("Text",{left:100,top:100})
+canvas.add(t)
 }
+
+// RECTANGLE
+
+function addRect(){
+const r=new fabric.Rect({
+left:150,
+top:150,
+fill:"red",
+width:100,
+height:80
+})
+canvas.add(r)
+}
+
+// UPLOAD
 
 function upload(){
-
 const input=document.createElement("input")
-
 input.type="file"
-
 input.onchange=e=>{
-
-const file=e.target.files[0]
-
 const reader=new FileReader()
-
 reader.onload=f=>{
-
 fabric.Image.fromURL(f.target.result,img=>{
-
 img.scaleToWidth(300)
-
 canvas.add(img)
-
 })
-
 }
-
-reader.readAsDataURL(file)
-
+reader.readAsDataURL(e.target.files[0])
 }
-
 input.click()
-
 }
+
+// EXPORT
 
 function exportPNG(){
-
 const link=document.createElement("a")
-
 link.href=canvas.toDataURL()
-
 link.download="design.png"
-
 link.click()
-
 }
 
+// LAYERS
+
+function updateLayers(){
+const list=document.getElementById("layerList")
+list.innerHTML=""
+canvas.getObjects().forEach((obj,i)=>{
+const li=document.createElement("li")
+li.innerText=obj.type+" "+i
+li.draggable=true
+list.appendChild(li)
+})
+}
+
+canvas.on("object:added",updateLayers)
+
+// BACKGROUND REMOVE DEMO
+
+function removeBG(){
+alert("Connect any background remover API here")
+}
+
+// SAVE PROJECT
+
+function saveProject(){
+localStorage.setItem("project",JSON.stringify(canvas))
+alert("Project saved")
+}
 
 // VIDEO
 
 const videoUpload=document.getElementById("videoUpload")
-
 const videoPlayer=document.getElementById("videoPlayer")
 
 videoUpload.onchange=function(){
+videoPlayer.src=URL.createObjectURL(this.files[0])
+}
 
-const file=this.files[0]
+document.getElementById("timeline").oninput=function(){
+videoPlayer.currentTime=(videoPlayer.duration*this.value)/100
+}
 
-videoPlayer.src=URL.createObjectURL(file)
+function playVideo(){videoPlayer.play()}
+function pauseVideo(){videoPlayer.pause()}
+
+// AI IMAGE
+
+async function generateAI(){
+
+const prompt=document.getElementById("prompt").value
+
+const res=await fetch("https://api.openai.com/v1/images/generations",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer YOUR_OPENAI_KEY"
+},
+body:JSON.stringify({
+model:"gpt-image-1",
+prompt:prompt,
+size:"1024x1024"
+})
+})
+
+const data=await res.json()
+
+document.getElementById("aiImage").src=data.data[0].url
 
 }
 
-function playVideo(){
+// FIREBASE LOGIN (optional)
 
-videoPlayer.play()
-
+const firebaseConfig={
+apiKey:"YOUR_KEY",
+authDomain:"YOUR_DOMAIN",
+projectId:"YOUR_PROJECT"
 }
 
-function pauseVideo(){
+if(firebaseConfig.apiKey!="YOUR_KEY"){
+firebase.initializeApp(firebaseConfig)
+const auth=firebase.auth()
 
-videoPlayer.pause()
+function login(){
+auth.signInWithEmailAndPassword(
+email.value,
+password.value
+)
+}
 
+function signup(){
+auth.createUserWithEmailAndPassword(
+email.value,
+password.value
+)
+}
 }
 
 </script>

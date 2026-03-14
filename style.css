@@ -24,7 +24,7 @@ display:flex;
 }
 
 .sidebar{
-width:200px;
+width:220px;
 background:#222;
 color:white;
 padding:20px;
@@ -33,10 +33,12 @@ flex-direction:column;
 }
 
 .sidebar button{
-margin:5px 0;
+margin:6px 0;
 padding:10px;
 border:none;
 cursor:pointer;
+background:#444;
+color:white;
 }
 
 .main{
@@ -63,7 +65,6 @@ border:2px dashed gray;
 background:white;
 }
 
-#layers{
-margin-top:10px;
-font-size:14px;
+textarea{
+width:500px;
 }

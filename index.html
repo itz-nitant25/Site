@@ -20,12 +20,12 @@
 
 <div class="sidebar">
 
-<h2 class="logo">Creator</h2>
+<h2>Creator</h2>
 
-<button onclick="showPage('dashboard')">🏠 Dashboard</button>
-<button onclick="showPage('imageEditor')">🎨 Image Editor</button>
-<button onclick="showPage('videoEditor')">🎬 Video Editor</button>
-<button onclick="showPage('settings')">⚙ Settings</button>
+<button onclick="openPage('dashboard')">Dashboard</button>
+<button onclick="openPage('image')">Image Editor</button>
+<button onclick="openPage('video')">Video Editor</button>
+<button onclick="toggleTheme()">Dark Mode</button>
 
 </div>
 
@@ -34,61 +34,59 @@
 
 <div class="main">
 
-<!-- TOP BAR -->
-
-<div class="topbar">
-
-<h3>Creator Studio</h3>
-
-<button onclick="toggleTheme()">🌙</button>
-
-</div>
-
-
 <!-- DASHBOARD -->
 
 <div id="dashboard" class="page active">
 
-<div class="cards">
-
-<div class="card" onclick="showPage('imageEditor')">
-
-<h2>🎨 Image Editor</h2>
-<p>Edit images like Canva</p>
-
-</div>
-
-<div class="card" onclick="showPage('videoEditor')">
-
-<h2>🎬 Video Editor</h2>
-<p>Edit videos quickly</p>
-
-</div>
-
-</div>
+<h1>Welcome Creator 👋</h1>
+<p>Select tool from left panel</p>
 
 </div>
 
 
 <!-- IMAGE EDITOR -->
 
-<div id="imageEditor" class="page">
+<div id="image" class="page">
 
-<div class="editor-toolbar">
+<div class="editor">
 
-<button onclick="enableDraw()">✏ Draw</button>
+<!-- LEFT TOOLS -->
 
-<button onclick="addText()">📝 Text</button>
+<div class="tools">
 
-<button onclick="uploadImage()">📤 Upload</button>
+<button onclick="drawMode()">Draw</button>
 
-<button onclick="exportPNG()">⬇ Export</button>
+<input type="range" min="1" max="40" value="5" id="brushSize">
+
+<button onclick="addText()">Text</button>
+
+<button onclick="uploadImage()">Upload</button>
+
+<button onclick="removeBG()">Remove BG</button>
+
+<button onclick="exportPNG()">Export</button>
 
 </div>
 
-<div class="workspace">
+
+<!-- CANVAS -->
+
+<div class="canvasArea">
 
 <canvas id="canvas" width="900" height="500"></canvas>
+
+</div>
+
+
+<!-- LAYERS -->
+
+<div class="layers">
+
+<h3>Layers</h3>
+
+<ul id="layerList"></ul>
+
+</div>
 
 </div>
 
@@ -97,33 +95,24 @@
 
 <!-- VIDEO EDITOR -->
 
-<div id="videoEditor" class="page">
+<div id="video" class="page">
 
-<div class="video-panel">
+<h2>Video Editor</h2>
 
 <input type="file" id="videoUpload">
 
+<br><br>
+
 <video id="videoPlayer" width="800" controls></video>
 
-<div class="video-controls">
+<br>
 
-<button onclick="playVideo()">▶</button>
-<button onclick="pauseVideo()">⏸</button>
+<input type="range" id="timeline" min="0" max="100">
 
-</div>
+<br>
 
-</div>
-
-</div>
-
-
-<!-- SETTINGS -->
-
-<div id="settings" class="page">
-
-<h2>Settings</h2>
-
-<button onclick="toggleTheme()">Dark / Light Mode</button>
+<button onclick="playVideo()">Play</button>
+<button onclick="pauseVideo()">Pause</button>
 
 </div>
 
@@ -134,5 +123,4 @@
 <script src="script.js"></script>
 
 </body>
-
 </html>

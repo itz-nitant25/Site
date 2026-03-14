@@ -1,45 +1,71 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
-<title>Creator Studio Pro</title>
+<title>Creator Studio</title>
 
 <link rel="stylesheet" href="style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
 </head>
 
 <body>
 
-<div id="app">
+<div class="app">
+
+<!-- SIDEBAR -->
 
 <div class="sidebar">
 
-<h3 id="username">Guest</h3>
+<h2 class="logo">Creator</h2>
 
-<button onclick="openPage('dashboard')">Dashboard</button>
-<button onclick="openPage('imageEditor')">Image Editor</button>
-<button onclick="openPage('videoEditor')">Video Editor</button>
-<button onclick="openPage('captionEditor')">Caption AI</button>
-<button onclick="openPage('loginPage')">Login</button>
-<button onclick="openPage('settings')">Settings</button>
+<button onclick="showPage('dashboard')">🏠 Dashboard</button>
+<button onclick="showPage('imageEditor')">🎨 Image Editor</button>
+<button onclick="showPage('videoEditor')">🎬 Video Editor</button>
+<button onclick="showPage('settings')">⚙ Settings</button>
 
 </div>
 
 
+<!-- MAIN -->
+
 <div class="main">
+
+<!-- TOP BAR -->
+
+<div class="topbar">
+
+<h3>Creator Studio</h3>
+
+<button onclick="toggleTheme()">🌙</button>
+
+</div>
+
 
 <!-- DASHBOARD -->
 
 <div id="dashboard" class="page active">
 
-<h1 id="welcome">Hi Guest</h1>
+<div class="cards">
 
-<p>Create images, videos and captions.</p>
+<div class="card" onclick="showPage('imageEditor')">
+
+<h2>🎨 Image Editor</h2>
+<p>Edit images like Canva</p>
+
+</div>
+
+<div class="card" onclick="showPage('videoEditor')">
+
+<h2>🎬 Video Editor</h2>
+<p>Edit videos quickly</p>
+
+</div>
+
+</div>
 
 </div>
 
@@ -48,29 +74,23 @@
 
 <div id="imageEditor" class="page">
 
-<div class="toolbar">
+<div class="editor-toolbar">
 
-<button onclick="drawMode()">Draw</button>
+<button onclick="enableDraw()">✏ Draw</button>
 
-<button onclick="addText()">Text</button>
+<button onclick="addText()">📝 Text</button>
 
-<button onclick="addRectangle()">Rectangle</button>
+<button onclick="uploadImage()">📤 Upload</button>
 
-<button onclick="uploadImage()">Upload</button>
-
-<button onclick="removeBg()">Remove BG</button>
-
-<button onclick="undo()">Undo</button>
-
-<button onclick="redo()">Redo</button>
-
-<button onclick="exportPNG()">Export</button>
+<button onclick="exportPNG()">⬇ Export</button>
 
 </div>
 
+<div class="workspace">
+
 <canvas id="canvas" width="900" height="500"></canvas>
 
-<div id="layers"></div>
+</div>
 
 </div>
 
@@ -79,55 +99,20 @@
 
 <div id="videoEditor" class="page">
 
+<div class="video-panel">
+
 <input type="file" id="videoUpload">
 
-<video id="videoPlayer" width="700" controls></video>
+<video id="videoPlayer" width="800" controls></video>
 
-<div class="timeline">
+<div class="video-controls">
 
-<input type="range" id="timeline" min="0" max="100">
-
-</div>
-
-<div class="toolbar">
-
-<button onclick="playVideo()">Play</button>
-
-<button onclick="pauseVideo()">Pause</button>
-
-<button onclick="addCaption()">Add Caption</button>
+<button onclick="playVideo()">▶</button>
+<button onclick="pauseVideo()">⏸</button>
 
 </div>
 
-<div id="videoCaptions"></div>
-
 </div>
-
-
-<!-- CAPTION AI -->
-
-<div id="captionEditor" class="page">
-
-<input id="captionPrompt" placeholder="Describe caption">
-
-<button onclick="generateCaption()">Generate Caption</button>
-
-<textarea id="captionText"></textarea>
-
-</div>
-
-
-<!-- LOGIN -->
-
-<div id="loginPage" class="page">
-
-<h2>Login</h2>
-
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-
-<button onclick="login()">Login</button>
-<button onclick="signup()">Sign Up</button>
 
 </div>
 
@@ -136,8 +121,9 @@
 
 <div id="settings" class="page">
 
-<button onclick="toggleTheme()">Dark / Light</button>
-<button onclick="logout()">Logout</button>
+<h2>Settings</h2>
+
+<button onclick="toggleTheme()">Dark / Light Mode</button>
 
 </div>
 
@@ -148,4 +134,5 @@
 <script src="script.js"></script>
 
 </body>
+
 </html>

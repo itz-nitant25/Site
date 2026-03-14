@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
 <meta charset="UTF-8">
@@ -22,10 +21,10 @@
 
 <h2>Creator</h2>
 
-<button onclick="openPage('dashboard')">Dashboard</button>
-<button onclick="openPage('image')">Image Editor</button>
-<button onclick="openPage('video')">Video Editor</button>
-<button onclick="toggleTheme()">Dark Mode</button>
+<button id="btnDashboard">Dashboard</button>
+<button id="btnImage">Image Editor</button>
+<button id="btnVideo">Video Editor</button>
+<button id="btnTheme">Dark Mode</button>
 
 </div>
 
@@ -34,68 +33,33 @@
 
 <div class="main">
 
-<!-- DASHBOARD -->
-
 <div id="dashboard" class="page active">
 
 <h1>Welcome Creator 👋</h1>
-<p>Select tool from left panel</p>
+<p>Select tool from sidebar</p>
 
 </div>
 
 
-<!-- IMAGE EDITOR -->
+<div id="imagePage" class="page">
 
-<div id="image" class="page">
+<h2>Image Editor</h2>
 
-<div class="editor">
+<div class="toolbar">
 
-<!-- LEFT TOOLS -->
+<button id="drawBtn">Draw</button>
+<button id="textBtn">Add Text</button>
+<button id="uploadBtn">Upload</button>
+<button id="exportBtn">Export PNG</button>
 
-<div class="tools">
+</div>
 
-<button onclick="drawMode()">Draw</button>
-
-<input type="range" min="1" max="40" value="5" id="brushSize">
-
-<button onclick="addText()">Text</button>
-
-<button onclick="uploadImage()">Upload</button>
-
-<button onclick="removeBG()">Remove BG</button>
-
-<button onclick="exportPNG()">Export</button>
+<canvas id="canvas" width="800" height="450"></canvas>
 
 </div>
 
 
-<!-- CANVAS -->
-
-<div class="canvasArea">
-
-<canvas id="canvas" width="900" height="500"></canvas>
-
-</div>
-
-
-<!-- LAYERS -->
-
-<div class="layers">
-
-<h3>Layers</h3>
-
-<ul id="layerList"></ul>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- VIDEO EDITOR -->
-
-<div id="video" class="page">
+<div id="videoPage" class="page">
 
 <h2>Video Editor</h2>
 
@@ -103,16 +67,12 @@
 
 <br><br>
 
-<video id="videoPlayer" width="800" controls></video>
+<video id="videoPlayer" width="700" controls></video>
 
-<br>
+<br><br>
 
-<input type="range" id="timeline" min="0" max="100">
-
-<br>
-
-<button onclick="playVideo()">Play</button>
-<button onclick="pauseVideo()">Pause</button>
+<button id="playBtn">Play</button>
+<button id="pauseBtn">Pause</button>
 
 </div>
 

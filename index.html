@@ -4,19 +4,18 @@
 <meta charset="UTF-8">
 <title>Creator Studio Pro</title>
 
-<!-- Fabric -->
 <script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
 
-<!-- Firebase (optional) -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
 <style>
 
 body{
 margin:0;
 font-family:Segoe UI;
-background:#f4f6fb;
+background:#f3f4f6;
 }
 
 .dark{
@@ -30,7 +29,7 @@ height:100vh;
 }
 
 .sidebar{
-width:230px;
+width:240px;
 background:#111827;
 color:white;
 padding:20px;
@@ -39,17 +38,13 @@ flex-direction:column;
 }
 
 .sidebar button{
-margin:6px 0;
+margin:5px 0;
 padding:10px;
 border:none;
 background:#1f2937;
 color:white;
 cursor:pointer;
 border-radius:6px;
-}
-
-.sidebar button:hover{
-background:#374151;
 }
 
 .main{
@@ -68,84 +63,53 @@ padding:0 20px;
 border-bottom:1px solid #ddd;
 }
 
-.dark .topbar{
-background:#1e293b;
-}
+.page{display:none;padding:20px}
+.page.active{display:block}
 
 .workspace{
-flex:1;
 display:flex;
 gap:10px;
-padding:15px;
 }
 
 .tools{
-width:130px;
+width:140px;
 background:white;
 padding:10px;
 border-radius:8px;
 display:flex;
 flex-direction:column;
-gap:8px;
-}
-
-.layers{
-width:180px;
-background:white;
-padding:10px;
-border-radius:8px;
+gap:6px;
 }
 
 .canvasBox{
 flex:1;
 background:white;
-border-radius:8px;
-padding:10px;
 display:flex;
 justify-content:center;
 align-items:center;
+border-radius:8px;
+}
+
+.layers{
+width:200px;
+background:white;
+padding:10px;
+border-radius:8px;
+overflow:auto;
+}
+
+.templates img{
+width:100%;
+margin-bottom:8px;
+cursor:pointer;
+border-radius:6px;
 }
 
 canvas{
 border:1px solid #ddd;
 }
 
-.page{
-display:none;
-height:100%;
-}
-
-.page.active{
-display:block;
-}
-
-.toolbar button{
-padding:8px;
-border:none;
-background:#2563eb;
-color:white;
-cursor:pointer;
-border-radius:5px;
-}
-
-.card{
-background:white;
-padding:25px;
-border-radius:10px;
-margin:10px;
-cursor:pointer;
-box-shadow:0 5px 10px rgba(0,0,0,0.1);
-}
-
-.videoPanel{
-background:white;
-padding:20px;
-border-radius:8px;
-}
-
-input,textarea{
-padding:6px;
-margin:5px 0;
+.timeline{
 width:100%;
 }
 
@@ -156,37 +120,33 @@ width:100%;
 
 <div class="app">
 
-<!-- SIDEBAR -->
-
 <div class="sidebar">
 
-<h2>Creator</h2>
+<h2>Studio</h2>
 
-<button onclick="openPage('dashboard')">🏠 Dashboard</button>
-<button onclick="openPage('image')">🎨 Image Editor</button>
-<button onclick="openPage('video')">🎬 Video Editor</button>
-<button onclick="openPage('ai')">🤖 AI Image</button>
-<button onclick="openPage('login')">🔐 Login</button>
-<button onclick="toggleTheme()">🌙 Theme</button>
+<button onclick="openPage('dashboard')">Dashboard</button>
+<button onclick="openPage('image')">Image Editor</button>
+<button onclick="openPage('video')">Video Editor</button>
+<button onclick="openPage('ai')">AI Generator</button>
+<button onclick="googleLogin()">Google Login</button>
+<button onclick="toggleTheme()">Theme</button>
 
 </div>
-
-<!-- MAIN -->
 
 <div class="main">
 
 <div class="topbar">
-<h3>Creator Studio</h3>
-<button onclick="saveProject()">💾 Save</button>
+
+<h3 id="userText">Creator Studio</h3>
+
 </div>
 
 <!-- DASHBOARD -->
 
 <div id="dashboard" class="page active">
 
-<div class="card" onclick="openPage('image')">🎨 Open Image Editor</div>
-<div class="card" onclick="openPage('video')">🎬 Open Video Editor</div>
-<div class="card" onclick="openPage('ai')">🤖 AI Image Generator</div>
+<h2>Welcome</h2>
+<p>Select a tool from sidebar.</p>
 
 </div>
 
@@ -200,22 +160,23 @@ width:100%;
 
 <button onclick="draw()">Draw</button>
 <button onclick="addText()">Text</button>
-<button onclick="addRect()">Rectangle</button>
+<button onclick="addRect()">Shape</button>
 <button onclick="upload()">Upload</button>
-<button onclick="removeBG()">Remove BG</button>
 <button onclick="exportPNG()">Export</button>
-
-<input type="range" min="1" max="40" id="brush">
 
 </div>
 
 <div class="canvasBox">
 
-<canvas id="canvas" width="800" height="450"></canvas>
+<canvas id="canvas" width="750" height="420"></canvas>
 
 </div>
 
 <div class="layers">
+
+<h4>Templates</h4>
+
+<div class="templates" id="templates"></div>
 
 <h4>Layers</h4>
 <ul id="layerList"></ul>
@@ -230,7 +191,7 @@ width:100%;
 
 <div id="video" class="page">
 
-<div class="videoPanel">
+<h3>Video Editor</h3>
 
 <input type="file" id="videoUpload">
 
@@ -240,18 +201,24 @@ width:100%;
 
 <br><br>
 
-<input type="range" id="timeline" min="0" max="100">
+<label>Start Trim</label>
+<input type="range" id="startTrim" min="0" max="100">
+
+<label>End Trim</label>
+<input type="range" id="endTrim" min="0" max="100">
 
 <br><br>
+
+<input class="timeline" type="range" id="timeline" min="0" max="100">
+
+<br>
 
 <button onclick="playVideo()">Play</button>
 <button onclick="pauseVideo()">Pause</button>
 
 </div>
 
-</div>
-
-<!-- AI IMAGE -->
+<!-- AI -->
 
 <div id="ai" class="page">
 
@@ -267,126 +234,115 @@ width:100%;
 
 </div>
 
-<!-- LOGIN -->
-
-<div id="login" class="page">
-
-<h3>Login</h3>
-
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-
-<button onclick="login()">Login</button>
-<button onclick="signup()">Sign Up</button>
-
 </div>
-
-</div>
-
 </div>
 
 <script>
 
-// PAGE SWITCH
+/* PAGE SWITCH */
 
 function openPage(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
 document.getElementById(id).classList.add("active")
 }
 
-// THEME
+/* THEME */
 
 function toggleTheme(){
 document.body.classList.toggle("dark")
 }
 
-// CANVAS
+/* CANVAS */
 
 const canvas=new fabric.Canvas("canvas")
 
-// DRAW
-
-function draw(){
-canvas.isDrawingMode=true
-canvas.freeDrawingBrush.width=document.getElementById("brush").value
-}
-
-// TEXT
+function draw(){canvas.isDrawingMode=true}
 
 function addText(){
 const t=new fabric.IText("Text",{left:100,top:100})
 canvas.add(t)
+updateLayers()
 }
-
-// RECTANGLE
 
 function addRect(){
-const r=new fabric.Rect({
-left:150,
-top:150,
-fill:"red",
-width:100,
-height:80
-})
+const r=new fabric.Rect({left:150,top:150,width:120,height:80,fill:"red"})
 canvas.add(r)
+updateLayers()
 }
 
-// UPLOAD
-
 function upload(){
+
 const input=document.createElement("input")
 input.type="file"
+
 input.onchange=e=>{
 const reader=new FileReader()
 reader.onload=f=>{
 fabric.Image.fromURL(f.target.result,img=>{
-img.scaleToWidth(300)
+img.scaleToWidth(250)
 canvas.add(img)
+updateLayers()
 })
 }
 reader.readAsDataURL(e.target.files[0])
 }
+
 input.click()
+
 }
 
-// EXPORT
-
 function exportPNG(){
+
 const link=document.createElement("a")
 link.href=canvas.toDataURL()
 link.download="design.png"
 link.click()
+
 }
 
-// LAYERS
+/* TEMPLATE LIBRARY */
+
+const templatePanel=document.getElementById("templates")
+
+for(let i=1;i<=50;i++){
+
+const img=document.createElement("img")
+img.src="https://picsum.photos/200/120?random="+i
+
+img.onclick=()=>{
+
+fabric.Image.fromURL(img.src,obj=>{
+obj.scaleToWidth(300)
+canvas.add(obj)
+updateLayers()
+})
+
+}
+
+templatePanel.appendChild(img)
+
+}
+
+/* LAYERS */
 
 function updateLayers(){
+
 const list=document.getElementById("layerList")
 list.innerHTML=""
-canvas.getObjects().forEach((obj,i)=>{
+
+canvas.getObjects().forEach((o,i)=>{
+
 const li=document.createElement("li")
-li.innerText=obj.type+" "+i
-li.draggable=true
+li.innerText=o.type+" "+i
 list.appendChild(li)
+
 })
+
 }
 
 canvas.on("object:added",updateLayers)
 
-// BACKGROUND REMOVE DEMO
-
-function removeBG(){
-alert("Connect any background remover API here")
-}
-
-// SAVE PROJECT
-
-function saveProject(){
-localStorage.setItem("project",JSON.stringify(canvas))
-alert("Project saved")
-}
-
-// VIDEO
+/* VIDEO */
 
 const videoUpload=document.getElementById("videoUpload")
 const videoPlayer=document.getElementById("videoPlayer")
@@ -402,23 +358,27 @@ videoPlayer.currentTime=(videoPlayer.duration*this.value)/100
 function playVideo(){videoPlayer.play()}
 function pauseVideo(){videoPlayer.pause()}
 
-// AI IMAGE
+/* AI IMAGE */
 
 async function generateAI(){
 
 const prompt=document.getElementById("prompt").value
 
 const res=await fetch("https://api.openai.com/v1/images/generations",{
+
 method:"POST",
+
 headers:{
 "Content-Type":"application/json",
 "Authorization":"Bearer YOUR_OPENAI_KEY"
 },
+
 body:JSON.stringify({
 model:"gpt-image-1",
 prompt:prompt,
 size:"1024x1024"
 })
+
 })
 
 const data=await res.json()
@@ -427,31 +387,30 @@ document.getElementById("aiImage").src=data.data[0].url
 
 }
 
-// FIREBASE LOGIN (optional)
+/* FIREBASE LOGIN */
 
 const firebaseConfig={
+
 apiKey:"YOUR_KEY",
 authDomain:"YOUR_DOMAIN",
-projectId:"YOUR_PROJECT"
+projectId:"YOUR_ID"
+
 }
 
-if(firebaseConfig.apiKey!="YOUR_KEY"){
 firebase.initializeApp(firebaseConfig)
+
 const auth=firebase.auth()
 
-function login(){
-auth.signInWithEmailAndPassword(
-email.value,
-password.value
-)
-}
+function googleLogin(){
 
-function signup(){
-auth.createUserWithEmailAndPassword(
-email.value,
-password.value
-)
-}
+const provider=new firebase.auth.GoogleAuthProvider()
+
+auth.signInWithPopup(provider).then(res=>{
+
+document.getElementById("userText").innerText="Hi "+res.user.displayName
+
+})
+
 }
 
 </script>

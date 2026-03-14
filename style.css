@@ -1,71 +1,129 @@
 body{
 margin:0;
-font-family:Arial;
-background:white;
+font-family:Segoe UI;
+background:#f5f6fa;
 color:#222;
 }
 
-.dark{
-background:#121212;
-color:white;
-}
-
-#app{
+.app{
 display:flex;
 height:100vh;
 }
 
 .sidebar{
-width:230px;
-background:#111;
+width:220px;
+background:#0f172a;
 color:white;
 padding:20px;
 display:flex;
 flex-direction:column;
 }
 
+.logo{
+margin-bottom:20px;
+}
+
 .sidebar button{
-margin:6px 0;
-padding:10px;
-background:#333;
-color:white;
+margin:8px 0;
+padding:12px;
 border:none;
+background:#1e293b;
+color:white;
+border-radius:8px;
 cursor:pointer;
+transition:0.2s;
+}
+
+.sidebar button:hover{
+background:#334155;
 }
 
 .main{
 flex:1;
-padding:20px;
-overflow:auto;
+display:flex;
+flex-direction:column;
+}
+
+.topbar{
+height:60px;
+background:white;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+border-bottom:1px solid #ddd;
 }
 
 .page{
 display:none;
+padding:20px;
 }
 
 .page.active{
 display:block;
 }
 
-.toolbar button{
-margin:5px;
-padding:8px 14px;
-background:#3b82f6;
+.cards{
+display:flex;
+gap:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+cursor:pointer;
+width:220px;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.editor-toolbar{
+margin-bottom:10px;
+}
+
+.editor-toolbar button{
+padding:8px 15px;
+margin-right:8px;
+background:#2563eb;
 color:white;
 border:none;
+border-radius:6px;
 cursor:pointer;
 }
 
-#canvas{
-border:2px dashed #ccc;
+.workspace{
 background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-textarea{
-width:500px;
-height:120px;
+canvas{
+border:1px solid #ccc;
 }
 
-.timeline{
-margin:10px 0;
+.video-panel{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.video-controls button{
+margin:5px;
+padding:10px 20px;
+background:#2563eb;
+border:none;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+.dark{
+background:#111;
+color:white;
 }

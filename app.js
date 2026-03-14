@@ -1,21 +1,30 @@
-// PAGE SWITCH
+document.addEventListener("DOMContentLoaded",function(){
 
-function openPage(id){
+// PAGES
 
-document.querySelectorAll(".page").forEach(p=>{
+const dashboard=document.getElementById("dashboard")
+const imagePage=document.getElementById("imagePage")
+const videoPage=document.getElementById("videoPage")
 
-p.classList.remove("active")
+function showPage(page){
 
-})
+dashboard.classList.remove("active")
+imagePage.classList.remove("active")
+videoPage.classList.remove("active")
 
-document.getElementById(id).classList.add("active")
+page.classList.add("active")
 
 }
 
+// SIDEBAR BUTTONS
 
-// DARK MODE
+document.getElementById("btnDashboard").onclick=()=>showPage(dashboard)
 
-function toggleTheme(){
+document.getElementById("btnImage").onclick=()=>showPage(imagePage)
+
+document.getElementById("btnVideo").onclick=()=>showPage(videoPage)
+
+document.getElementById("btnTheme").onclick=()=>{
 
 document.body.classList.toggle("dark")
 
@@ -26,36 +35,27 @@ document.body.classList.toggle("dark")
 
 const canvas=new fabric.Canvas("canvas")
 
-const brushSlider=document.getElementById("brushSize")
+// DRAW
 
-
-// DRAW MODE
-
-function drawMode(){
+document.getElementById("drawBtn").onclick=function(){
 
 canvas.isDrawingMode=true
 
-canvas.freeDrawingBrush.width=parseInt(brushSlider.value)
-
 }
-
 
 // TEXT
 
-function addText(){
+document.getElementById("textBtn").onclick=function(){
 
 const text=new fabric.IText("Text",{left:100,top:100})
 
 canvas.add(text)
 
-updateLayers()
-
 }
 
+// UPLOAD
 
-// UPLOAD IMAGE
-
-function uploadImage(){
+document.getElementById("uploadBtn").onclick=function(){
 
 const input=document.createElement("input")
 
@@ -75,8 +75,6 @@ img.scaleToWidth(300)
 
 canvas.add(img)
 
-updateLayers()
-
 })
 
 }
@@ -89,10 +87,9 @@ input.click()
 
 }
 
-
 // EXPORT
 
-function exportPNG(){
+document.getElementById("exportBtn").onclick=function(){
 
 const link=document.createElement("a")
 
@@ -105,42 +102,9 @@ link.click()
 }
 
 
-// LAYERS
-
-function updateLayers(){
-
-const list=document.getElementById("layerList")
-
-list.innerHTML=""
-
-canvas.getObjects().forEach((obj,i)=>{
-
-const li=document.createElement("li")
-
-li.innerText=obj.type+" "+i
-
-list.appendChild(li)
-
-})
-
-}
-
-canvas.on("object:added",updateLayers)
-
-
-// BG REMOVE DEMO
-
-function removeBG(){
-
-alert("AI Background remover needs API")
-
-}
-
-
 // VIDEO
 
 const videoUpload=document.getElementById("videoUpload")
-
 const videoPlayer=document.getElementById("videoPlayer")
 
 videoUpload.onchange=function(){
@@ -151,31 +115,16 @@ videoPlayer.src=URL.createObjectURL(file)
 
 }
 
-
-// TIMELINE
-
-const timeline=document.getElementById("timeline")
-
-timeline.oninput=function(){
-
-videoPlayer.currentTime=(videoPlayer.duration*this.value)/100
-
-}
-
-
-// PLAY
-
-function playVideo(){
+document.getElementById("playBtn").onclick=function(){
 
 videoPlayer.play()
 
 }
 
-
-// PAUSE
-
-function pauseVideo(){
+document.getElementById("pauseBtn").onclick=function(){
 
 videoPlayer.pause()
 
 }
+
+})

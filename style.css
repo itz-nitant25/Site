@@ -1,8 +1,7 @@
 body{
 margin:0;
-font-family:Segoe UI;
-background:#f5f6fa;
-color:#222;
+font-family:Arial;
+background:#f4f6f9;
 }
 
 .app{
@@ -12,115 +11,65 @@ height:100vh;
 
 .sidebar{
 width:220px;
-background:#0f172a;
+background:#111;
 color:white;
 padding:20px;
 display:flex;
 flex-direction:column;
-}
-
-.logo{
-margin-bottom:20px;
 }
 
 .sidebar button{
 margin:8px 0;
-padding:12px;
-border:none;
-background:#1e293b;
+padding:10px;
+background:#333;
 color:white;
-border-radius:8px;
+border:none;
 cursor:pointer;
-transition:0.2s;
-}
-
-.sidebar button:hover{
-background:#334155;
 }
 
 .main{
 flex:1;
-display:flex;
-flex-direction:column;
-}
-
-.topbar{
-height:60px;
-background:white;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 20px;
-border-bottom:1px solid #ddd;
+padding:20px;
 }
 
 .page{
 display:none;
-padding:20px;
 }
 
 .page.active{
 display:block;
 }
 
-.cards{
+.editor{
 display:flex;
-gap:20px;
+gap:10px;
 }
 
-.card{
+.tools{
+width:120px;
 background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-cursor:pointer;
-width:220px;
+padding:10px;
+border-radius:8px;
+display:flex;
+flex-direction:column;
+gap:10px;
 }
 
-.card:hover{
-transform:translateY(-5px);
-}
-
-.editor-toolbar{
-margin-bottom:10px;
-}
-
-.editor-toolbar button{
-padding:8px 15px;
-margin-right:8px;
-background:#2563eb;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
-
-.workspace{
+.canvasArea{
 background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+padding:10px;
+border-radius:8px;
+}
+
+.layers{
+width:150px;
+background:white;
+padding:10px;
+border-radius:8px;
 }
 
 canvas{
 border:1px solid #ccc;
-}
-
-.video-panel{
-background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-.video-controls button{
-margin:5px;
-padding:10px 20px;
-background:#2563eb;
-border:none;
-color:white;
-border-radius:6px;
-cursor:pointer;
 }
 
 .dark{

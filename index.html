@@ -13,8 +13,8 @@
 
 body{
 margin:0;
-font-family:Arial;
-background:#f5f5f5;
+font-family:Segoe UI;
+background:#f3f4f6;
 }
 
 /* TOPBAR */
@@ -25,8 +25,14 @@ background:white;
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:0 20px;
-box-shadow:0 2px 10px rgba(0,0,0,0.1);
+padding:0 25px;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo{
+font-weight:700;
+font-size:18px;
+color:#2563eb;
 }
 
 .userMenu{
@@ -34,8 +40,8 @@ position:relative;
 }
 
 .userMenu img{
-width:40px;
-height:40px;
+width:38px;
+height:38px;
 border-radius:50%;
 cursor:pointer;
 }
@@ -45,23 +51,23 @@ position:absolute;
 right:0;
 top:50px;
 background:white;
-box-shadow:0 5px 20px rgba(0,0,0,0.2);
-border-radius:8px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+border-radius:10px;
 display:none;
 flex-direction:column;
 min-width:160px;
 }
 
 .dropdown button{
-padding:10px;
 border:none;
 background:white;
+padding:12px;
 cursor:pointer;
 text-align:left;
 }
 
 .dropdown button:hover{
-background:#eee;
+background:#f1f1f1;
 }
 
 /* LAYOUT */
@@ -75,61 +81,86 @@ height:calc(100vh - 60px);
 
 .sidebar{
 width:220px;
-background:white;
-padding:10px;
-border-right:1px solid #ddd;
+background:linear-gradient(180deg,#2563eb,#4f46e5);
+padding:15px;
+color:white;
+}
+
+.sidebar h4{
+margin-top:10px;
 }
 
 .sidebar button{
 width:100%;
-padding:10px;
-margin-bottom:10px;
 border:none;
-background:#f0f0f0;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+background:rgba(255,255,255,0.15);
+color:white;
 cursor:pointer;
-border-radius:6px;
 }
 
 .sidebar button:hover{
-background:#e0e0e0;
+background:rgba(255,255,255,0.3);
 }
 
 /* WORKSPACE */
 
 .workspace{
 flex:1;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:flex-start;
+padding:25px;
+overflow:auto;
+}
+
+.card{
+background:white;
 padding:20px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+margin-bottom:20px;
 }
 
-/* PANELS */
-
-.panel{
-display:none;
-width:100%;
-max-width:900px;
-}
+/* CANVAS */
 
 canvas{
-border:1px solid #ccc;
+border:1px solid #ddd;
+border-radius:8px;
+}
+
+/* BUTTON */
+
+.toolBtn{
+background:#2563eb;
+border:none;
+padding:10px 14px;
+border-radius:8px;
+color:white;
+cursor:pointer;
+margin:5px;
+}
+
+.toolBtn:hover{
+background:#1d4ed8;
 }
 
 /* DARK MODE */
 
 .dark{
-background:#1e1e1e;
+background:#111827;
 color:white;
 }
 
-.dark .sidebar{
-background:#2a2a2a;
+.dark .card{
+background:#1f2937;
 }
 
 .dark .topbar{
-background:#2a2a2a;
+background:#1f2937;
+}
+
+.dark .sidebar{
+background:#111827;
 }
 
 </style>
@@ -137,11 +168,9 @@ background:#2a2a2a;
 
 <body>
 
-<!-- TOPBAR -->
-
 <div class="topbar">
 
-<h3>Creator Studio</h3>
+<div class="logo">Creator Studio</div>
 
 <div class="userMenu">
 
@@ -163,9 +192,9 @@ background:#2a2a2a;
 
 <div class="container">
 
-<!-- SIDEBAR -->
-
 <div class="sidebar">
+
+<h4>Tools</h4>
 
 <button onclick="openPage('dashboard')">Dashboard</button>
 
@@ -177,26 +206,24 @@ background:#2a2a2a;
 
 </div>
 
-<!-- WORKSPACE -->
-
 <div class="workspace">
 
-<div id="dashboard" class="panel" style="display:block">
+<div id="dashboard" class="card">
+
 <h2>Welcome 👋</h2>
-<p>Create images, videos and AI content.</p>
+<p>Create images, edit videos and generate AI art.</p>
+
 </div>
 
-<!-- IMAGE EDITOR -->
-
-<div id="imageEditor" class="panel">
+<div id="imageEditor" class="card" style="display:none">
 
 <h3>Image Editor</h3>
 
-<button onclick="addText()">Add Text</button>
-<button onclick="enableDraw()">Draw</button>
+<button class="toolBtn" onclick="addText()">Add Text</button>
+<button class="toolBtn" onclick="enableDraw()">Draw</button>
 <input type="file" id="imgUpload">
 
-<button onclick="exportPNG()">Export PNG</button>
+<button class="toolBtn" onclick="exportPNG()">Export PNG</button>
 
 <br><br>
 
@@ -204,9 +231,7 @@ background:#2a2a2a;
 
 </div>
 
-<!-- VIDEO EDITOR -->
-
-<div id="videoEditor" class="panel">
+<div id="videoEditor" class="card" style="display:none">
 
 <h3>Video Editor</h3>
 
@@ -214,19 +239,17 @@ background:#2a2a2a;
 
 <br><br>
 
-<video id="videoPlayer" width="600" controls></video>
+<video id="videoPlayer" width="700" controls></video>
 
 </div>
 
-<!-- AI IMAGE GENERATOR -->
-
-<div id="aiImage" class="panel">
+<div id="aiImage" class="card" style="display:none">
 
 <h3>AI Image Generator</h3>
 
-<input id="prompt" placeholder="Describe image">
+<input id="prompt" placeholder="Describe your image">
 
-<button onclick="generateImage()">Generate</button>
+<button class="toolBtn" onclick="generateImage()">Generate</button>
 
 <br><br>
 
@@ -241,36 +264,24 @@ background:#2a2a2a;
 
 /* FIREBASE CONFIG */
 
-const firebaseConfig = {
-
-apiKey: "AIzaSyBVKAxo5MguiE1yQn2ZNUXv_oJJykkfgZM",
-
-authDomain: "creator-studio-f73e2.firebaseapp.com",
-
-projectId: "creator-studio-f73e2",
-
-};
+const firebaseConfig={
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_DOMAIN",
+projectId:"YOUR_PROJECT"
+}
 
 firebase.initializeApp(firebaseConfig)
 
-const auth = firebase.auth()
-
-/* MENU */
+const auth=firebase.auth()
 
 function toggleMenu(){
-
 const menu=document.getElementById("menuDropdown")
-
-menu.style.display =
-menu.style.display==="flex"?"none":"flex"
-
+menu.style.display=menu.style.display==="flex"?"none":"flex"
 }
-
-/* LOGIN */
 
 function googleLogin(){
 
-const provider = new firebase.auth.GoogleAuthProvider()
+const provider=new firebase.auth.GoogleAuthProvider()
 
 auth.signInWithPopup(provider).then(res=>{
 
@@ -280,18 +291,13 @@ document.getElementById("topProfile").src=res.user.photoURL
 
 }
 
-/* LOGOUT */
-
 function logout(){
 
 auth.signOut()
 
-document.getElementById("topProfile").src=
-"https://i.imgur.com/4Z7b5.jpg"
+document.getElementById("topProfile").src="https://i.imgur.com/4Z7b5.jpg"
 
 }
-
-/* DARK MODE */
 
 function toggleTheme(){
 
@@ -299,11 +305,9 @@ document.body.classList.toggle("dark")
 
 }
 
-/* PAGE SWITCH */
-
 function openPage(page){
 
-document.querySelectorAll(".panel").forEach(p=>p.style.display="none")
+document.querySelectorAll(".card").forEach(p=>p.style.display="none")
 
 document.getElementById(page).style.display="block"
 
@@ -311,16 +315,11 @@ document.getElementById(page).style.display="block"
 
 /* CANVAS */
 
-const canvas = new fabric.Canvas('canvas')
+const canvas=new fabric.Canvas('canvas')
 
 function addText(){
 
-const text = new fabric.Textbox("Text",{
-
-left:100,
-top:100
-
-})
+const text=new fabric.Textbox("Text",{left:100,top:100})
 
 canvas.add(text)
 
@@ -328,11 +327,9 @@ canvas.add(text)
 
 function enableDraw(){
 
-canvas.isDrawingMode = true
+canvas.isDrawingMode=true
 
 }
-
-/* IMAGE UPLOAD */
 
 document.getElementById("imgUpload").addEventListener("change",e=>{
 
@@ -354,8 +351,6 @@ reader.readAsDataURL(e.target.files[0])
 
 })
 
-/* EXPORT */
-
 function exportPNG(){
 
 const data=canvas.toDataURL()
@@ -363,9 +358,7 @@ const data=canvas.toDataURL()
 const a=document.createElement("a")
 
 a.href=data
-
 a.download="image.png"
-
 a.click()
 
 }
@@ -374,15 +367,13 @@ a.click()
 
 document.getElementById("videoUpload").addEventListener("change",e=>{
 
-const file=e.target.files[0]
-
-const url=URL.createObjectURL(file)
+const url=URL.createObjectURL(e.target.files[0])
 
 document.getElementById("videoPlayer").src=url
 
 })
 
-/* AI IMAGE GENERATOR */
+/* AI IMAGE */
 
 async function generateImage(){
 
@@ -393,21 +384,14 @@ const res=await fetch("https://api.openai.com/v1/images/generations",{
 method:"POST",
 
 headers:{
-
 "Content-Type":"application/json",
-
 "Authorization":"Bearer YOUR_OPENAI_KEY"
-
 },
 
 body:JSON.stringify({
-
 prompt:prompt,
-
 n:1,
-
 size:"512x512"
-
 })
 
 })

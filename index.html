@@ -2,56 +2,22 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Creator Studio Pro</title>
+<title>Creator Studio</title>
 
-<script src="https://cdn.jsdelivr.net/npm/fabric@5.3.0/dist/fabric.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
 
 <style>
 
 body{
 margin:0;
-font-family:Segoe UI;
-background:#f3f4f6;
+font-family:Arial;
+background:#f5f5f5;
 }
 
-.dark{
-background:#0f172a;
-color:white;
-}
-
-.app{
-display:flex;
-height:100vh;
-}
-
-.sidebar{
-width:240px;
-background:#111827;
-color:white;
-padding:20px;
-display:flex;
-flex-direction:column;
-}
-
-.sidebar button{
-margin:5px 0;
-padding:10px;
-border:none;
-background:#1f2937;
-color:white;
-cursor:pointer;
-border-radius:6px;
-}
-
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
+/* TOPBAR */
 
 .topbar{
 height:60px;
@@ -60,57 +26,110 @@ display:flex;
 align-items:center;
 justify-content:space-between;
 padding:0 20px;
-border-bottom:1px solid #ddd;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 
-.page{display:none;padding:20px}
-.page.active{display:block}
-
-.workspace{
-display:flex;
-gap:10px;
+.userMenu{
+position:relative;
 }
 
-.tools{
-width:140px;
+.userMenu img{
+width:40px;
+height:40px;
+border-radius:50%;
+cursor:pointer;
+}
+
+.dropdown{
+position:absolute;
+right:0;
+top:50px;
 background:white;
-padding:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
 border-radius:8px;
-display:flex;
+display:none;
 flex-direction:column;
-gap:6px;
+min-width:160px;
 }
 
-.canvasBox{
-flex:1;
+.dropdown button{
+padding:10px;
+border:none;
 background:white;
-display:flex;
-justify-content:center;
-align-items:center;
-border-radius:8px;
+cursor:pointer;
+text-align:left;
 }
 
-.layers{
-width:200px;
+.dropdown button:hover{
+background:#eee;
+}
+
+/* LAYOUT */
+
+.container{
+display:flex;
+height:calc(100vh - 60px);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:220px;
 background:white;
 padding:10px;
-border-radius:8px;
-overflow:auto;
+border-right:1px solid #ddd;
 }
 
-.templates img{
+.sidebar button{
 width:100%;
-margin-bottom:8px;
+padding:10px;
+margin-bottom:10px;
+border:none;
+background:#f0f0f0;
 cursor:pointer;
 border-radius:6px;
 }
 
-canvas{
-border:1px solid #ddd;
+.sidebar button:hover{
+background:#e0e0e0;
 }
 
-.timeline{
+/* WORKSPACE */
+
+.workspace{
+flex:1;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:flex-start;
+padding:20px;
+}
+
+/* PANELS */
+
+.panel{
+display:none;
 width:100%;
+max-width:900px;
+}
+
+canvas{
+border:1px solid #ccc;
+}
+
+/* DARK MODE */
+
+.dark{
+background:#1e1e1e;
+color:white;
+}
+
+.dark .sidebar{
+background:#2a2a2a;
+}
+
+.dark .topbar{
+background:#2a2a2a;
 }
 
 </style>
@@ -118,78 +137,76 @@ width:100%;
 
 <body>
 
-<div class="app">
-
-<div class="sidebar">
-
-<h2>Studio</h2>
-
-<button onclick="openPage('dashboard')">Dashboard</button>
-<button onclick="openPage('image')">Image Editor</button>
-<button onclick="openPage('video')">Video Editor</button>
-<button onclick="openPage('ai')">AI Generator</button>
-<button onclick="googleLogin()">Google Login</button>
-<button onclick="toggleTheme()">Theme</button>
-
-</div>
-
-<div class="main">
+<!-- TOPBAR -->
 
 <div class="topbar">
 
-<h3 id="userText">Creator Studio</h3>
+<h3>Creator Studio</h3>
+
+<div class="userMenu">
+
+<img id="topProfile" src="https://i.imgur.com/4Z7b5.jpg" onclick="toggleMenu()">
+
+<div id="menuDropdown" class="dropdown">
+
+<button onclick="googleLogin()">Signup / Login</button>
+
+<button onclick="toggleTheme()">Dark Mode</button>
+
+<button onclick="logout()">Logout</button>
 
 </div>
 
-<!-- DASHBOARD -->
+</div>
 
-<div id="dashboard" class="page active">
+</div>
 
-<h2>Welcome</h2>
-<p>Select a tool from sidebar.</p>
+<div class="container">
 
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<button onclick="openPage('dashboard')">Dashboard</button>
+
+<button onclick="openPage('imageEditor')">Image Editor</button>
+
+<button onclick="openPage('videoEditor')">Video Editor</button>
+
+<button onclick="openPage('aiImage')">AI Image Generator</button>
+
+</div>
+
+<!-- WORKSPACE -->
+
+<div class="workspace">
+
+<div id="dashboard" class="panel" style="display:block">
+<h2>Welcome 👋</h2>
+<p>Create images, videos and AI content.</p>
 </div>
 
 <!-- IMAGE EDITOR -->
 
-<div id="image" class="page">
+<div id="imageEditor" class="panel">
 
-<div class="workspace">
+<h3>Image Editor</h3>
 
-<div class="tools">
+<button onclick="addText()">Add Text</button>
+<button onclick="enableDraw()">Draw</button>
+<input type="file" id="imgUpload">
 
-<button onclick="draw()">Draw</button>
-<button onclick="addText()">Text</button>
-<button onclick="addRect()">Shape</button>
-<button onclick="upload()">Upload</button>
-<button onclick="exportPNG()">Export</button>
+<button onclick="exportPNG()">Export PNG</button>
 
-</div>
+<br><br>
 
-<div class="canvasBox">
-
-<canvas id="canvas" width="750" height="420"></canvas>
-
-</div>
-
-<div class="layers">
-
-<h4>Templates</h4>
-
-<div class="templates" id="templates"></div>
-
-<h4>Layers</h4>
-<ul id="layerList"></ul>
-
-</div>
-
-</div>
+<canvas id="canvas" width="800" height="500"></canvas>
 
 </div>
 
 <!-- VIDEO EDITOR -->
 
-<div id="video" class="page">
+<div id="videoEditor" class="panel">
 
 <h3>Video Editor</h3>
 
@@ -197,40 +214,23 @@ width:100%;
 
 <br><br>
 
-<video id="videoPlayer" width="700" controls></video>
-
-<br><br>
-
-<label>Start Trim</label>
-<input type="range" id="startTrim" min="0" max="100">
-
-<label>End Trim</label>
-<input type="range" id="endTrim" min="0" max="100">
-
-<br><br>
-
-<input class="timeline" type="range" id="timeline" min="0" max="100">
-
-<br>
-
-<button onclick="playVideo()">Play</button>
-<button onclick="pauseVideo()">Pause</button>
+<video id="videoPlayer" width="600" controls></video>
 
 </div>
 
-<!-- AI -->
+<!-- AI IMAGE GENERATOR -->
 
-<div id="ai" class="page">
+<div id="aiImage" class="panel">
 
 <h3>AI Image Generator</h3>
 
 <input id="prompt" placeholder="Describe image">
 
-<button onclick="generateAI()">Generate</button>
+<button onclick="generateImage()">Generate</button>
 
 <br><br>
 
-<img id="aiImage" width="400">
+<img id="aiResult" width="400">
 
 </div>
 
@@ -239,128 +239,152 @@ width:100%;
 
 <script>
 
-/* PAGE SWITCH */
+/* FIREBASE CONFIG */
 
-function openPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
-document.getElementById(id).classList.add("active")
+const firebaseConfig = {
+
+apiKey: "YOUR_API_KEY",
+
+authDomain: "YOUR_DOMAIN",
+
+projectId: "YOUR_PROJECT",
+
+};
+
+firebase.initializeApp(firebaseConfig)
+
+const auth = firebase.auth()
+
+/* MENU */
+
+function toggleMenu(){
+
+const menu=document.getElementById("menuDropdown")
+
+menu.style.display =
+menu.style.display==="flex"?"none":"flex"
+
 }
 
-/* THEME */
+/* LOGIN */
+
+function googleLogin(){
+
+const provider = new firebase.auth.GoogleAuthProvider()
+
+auth.signInWithPopup(provider).then(res=>{
+
+document.getElementById("topProfile").src=res.user.photoURL
+
+})
+
+}
+
+/* LOGOUT */
+
+function logout(){
+
+auth.signOut()
+
+document.getElementById("topProfile").src=
+"https://i.imgur.com/4Z7b5.jpg"
+
+}
+
+/* DARK MODE */
 
 function toggleTheme(){
+
 document.body.classList.toggle("dark")
+
+}
+
+/* PAGE SWITCH */
+
+function openPage(page){
+
+document.querySelectorAll(".panel").forEach(p=>p.style.display="none")
+
+document.getElementById(page).style.display="block"
+
 }
 
 /* CANVAS */
 
-const canvas=new fabric.Canvas("canvas")
-
-function draw(){canvas.isDrawingMode=true}
+const canvas = new fabric.Canvas('canvas')
 
 function addText(){
-const t=new fabric.IText("Text",{left:100,top:100})
-canvas.add(t)
-updateLayers()
-}
 
-function addRect(){
-const r=new fabric.Rect({left:150,top:150,width:120,height:80,fill:"red"})
-canvas.add(r)
-updateLayers()
-}
+const text = new fabric.Textbox("Text",{
 
-function upload(){
+left:100,
+top:100
 
-const input=document.createElement("input")
-input.type="file"
-
-input.onchange=e=>{
-const reader=new FileReader()
-reader.onload=f=>{
-fabric.Image.fromURL(f.target.result,img=>{
-img.scaleToWidth(250)
-canvas.add(img)
-updateLayers()
 })
+
+canvas.add(text)
+
 }
+
+function enableDraw(){
+
+canvas.isDrawingMode = true
+
+}
+
+/* IMAGE UPLOAD */
+
+document.getElementById("imgUpload").addEventListener("change",e=>{
+
+const reader=new FileReader()
+
+reader.onload=function(f){
+
+fabric.Image.fromURL(f.target.result,function(img){
+
+img.scaleToWidth(200)
+
+canvas.add(img)
+
+})
+
+}
+
 reader.readAsDataURL(e.target.files[0])
-}
 
-input.click()
+})
 
-}
+/* EXPORT */
 
 function exportPNG(){
 
-const link=document.createElement("a")
-link.href=canvas.toDataURL()
-link.download="design.png"
-link.click()
+const data=canvas.toDataURL()
+
+const a=document.createElement("a")
+
+a.href=data
+
+a.download="image.png"
+
+a.click()
 
 }
-
-/* TEMPLATE LIBRARY */
-
-const templatePanel=document.getElementById("templates")
-
-for(let i=1;i<=50;i++){
-
-const img=document.createElement("img")
-img.src="https://picsum.photos/200/120?random="+i
-
-img.onclick=()=>{
-
-fabric.Image.fromURL(img.src,obj=>{
-obj.scaleToWidth(300)
-canvas.add(obj)
-updateLayers()
-})
-
-}
-
-templatePanel.appendChild(img)
-
-}
-
-/* LAYERS */
-
-function updateLayers(){
-
-const list=document.getElementById("layerList")
-list.innerHTML=""
-
-canvas.getObjects().forEach((o,i)=>{
-
-const li=document.createElement("li")
-li.innerText=o.type+" "+i
-list.appendChild(li)
-
-})
-
-}
-
-canvas.on("object:added",updateLayers)
 
 /* VIDEO */
 
-const videoUpload=document.getElementById("videoUpload")
-const videoPlayer=document.getElementById("videoPlayer")
+document.getElementById("videoUpload").addEventListener("change",e=>{
 
-videoUpload.onchange=function(){
-videoPlayer.src=URL.createObjectURL(this.files[0])
-}
+const file=e.target.files[0]
 
-document.getElementById("timeline").oninput=function(){
-videoPlayer.currentTime=(videoPlayer.duration*this.value)/100
-}
+const url=URL.createObjectURL(file)
 
-function playVideo(){videoPlayer.play()}
-function pauseVideo(){videoPlayer.pause()}
+document.getElementById("videoPlayer").src=url
 
-/* AI IMAGE */
+})
 
-async function generateAI(){
+/* AI IMAGE GENERATOR */
+
+async function generateImage(){
 
 const prompt=document.getElementById("prompt").value
 
@@ -369,48 +393,28 @@ const res=await fetch("https://api.openai.com/v1/images/generations",{
 method:"POST",
 
 headers:{
+
 "Content-Type":"application/json",
-"Authorization":"Bearer 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
-"
+
+"Authorization":"Bearer YOUR_OPENAI_KEY"
+
 },
 
 body:JSON.stringify({
-model:"gpt-image-1",
+
 prompt:prompt,
-size:"1024x1024"
+
+n:1,
+
+size:"512x512"
+
 })
 
 })
 
 const data=await res.json()
 
-document.getElementById("aiImage").src=data.data[0].url
-
-}
-
-/* FIREBASE LOGIN */
-
-const firebaseConfig={
-
-apiKey:"AIzaSyBVKAxo5MguiE1yQn2ZNUXv_oJJykkfgZM",
-authDomain:"creator-studio-f73e2.firebaseapp.com",
-projectId:"creator-studio-f73e2"
-
-}
-
-firebase.initializeApp(firebaseConfig)
-
-const auth=firebase.auth()
-
-function googleLogin(){
-
-const provider=new firebase.auth.GoogleAuthProvider()
-
-auth.signInWithPopup(provider).then(res=>{
-
-document.getElementById("userText").innerText="Hi "+res.user.displayName
-
-})
+document.getElementById("aiResult").src=data.data[0].url
 
 }
 
